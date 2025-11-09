@@ -22,9 +22,9 @@ const SearchBar :React.FC<SearchBarProps> = ({placeholder = "Search for Drinks..
 
   return (
     <div className='search-bar flex gap-5 items-center'>
-      <section className='input-container'>
+      <section className='input-container '>
         <input
-        className='bg-amber-50 rounded-[15px] h-[49px] p-4 w-[464px] text-[18px] text-black '
+        className='bg-amber-50 shadow-(--shadow-custom) rounded-[15px] h-[49px] p-4 w-[464px] text-[18px] text-black '
         type='text'
         value={query}
         onChange={(e) => setQuery(e.target.value)}
@@ -32,7 +32,7 @@ const SearchBar :React.FC<SearchBarProps> = ({placeholder = "Search for Drinks..
         onKeyDown={handleKeyPress}
         />
       </section>
-      <button className='search-btn bg-amber-800 w-[86px] h-[49px] p-2 rounded-[15px] cursor-pointer'>
+      <button className='search-btn shadow-(--shadow-custom) bg-amber-800 w-[86px] h-[49px] p-2 rounded-[15px] cursor-pointer'>
         Search
       </button>
     </div>
