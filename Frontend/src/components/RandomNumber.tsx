@@ -7,8 +7,6 @@ interface Props {
   number1?: number | undefined ; // optional to prevent runtime error
 }
 
-
-
 const RandomNumber: React.FC<Props> = ({ number1 }) => {
   const [randomNumber, setRandomNumber] = useState<number>()
 
