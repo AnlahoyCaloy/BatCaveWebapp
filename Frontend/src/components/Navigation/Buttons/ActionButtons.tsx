@@ -2,7 +2,7 @@
 import React, { forwardRef, useRef, useImperativeHandle, useState } from "react"
 import { motion, AnimatePresence, scale } from "framer-motion"
 import '../../../app/globals.css'
-
+import Link from "next/link"
 export interface ActionButtonRef {
   container: HTMLDivElement | null
 }
@@ -29,41 +29,42 @@ const ActionButtons = forwardRef<ActionButtonRef, ActionButtonProps>(
 
 
     const buttons = navs.map((nav, i) => (
-      <motion.div
-        key={i}
-        className={`action-button ${className}`}
-        style={{
-          filter: "url(#goo)",
-          width: 80,
-          height: 80,
-          borderRadius: "50%",
-          background: fill ?? "#00bcd4",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          color: "white",
-          fontWeight: "bold",
-          cursor: "pointer",
-          position: "absolute",
-          left: 0,
-          zIndex: 1,
-          top: 0,
-        }}
-        initial={{ x: -10, scale: 0.7 , y : -50}}
-        animate={{
-          y : -40,
-          x: open ? (-distance) * (i + 1) : -10,
-          scale: open ? 0.9 : 0.7,
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 200,
-          damping: 30,
-          delay: i * 0.01,
-        }}
-      >
-        {nav}
-      </motion.div>
+      <Link key={i} href={`/${nav.toLowerCase()}`} passHref>
+        <motion.a
+          className={`action-button ${className}`}
+          style={{
+            filter: "url(#goo)",
+            width: 80,
+            height: 80,
+            borderRadius: "50%",
+            background: fill ?? "#00bcd4",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "white",
+            fontWeight: "bold",
+            cursor: "pointer",
+            position: "absolute",
+            left: 0,
+            zIndex: 1,
+            top: 0,
+          }}
+          initial={{ x: -10, scale: 0.7 , y : -50}}
+          animate={{
+            y : -40,
+            x: open ? (-distance) * (i + 1) : -10,
+            scale: open ? 0.9 : 0.7,
+          }}
+          transition={{
+            type: "spring",
+            stiffness: 200,
+            damping: 30,
+            delay: i * 0.05,
+          }}
+        >
+          {nav}
+        </motion.a>
+      </Link>
     ))
 
     return (
@@ -117,8 +118,24 @@ const ActionButtons = forwardRef<ActionButtonRef, ActionButtonProps>(
           animate={{
             scale: isShrunk ? 1 : 1.5, // shrink or return
           }}
-        >
-          Store
+        > 
+          <motion.div className="hamburger flex flex-col gap-3">
+            <motion.span
+              className="hamburger-1 w-[30px] h-[3px] bg-amber-50"
+              animate={open ? { rotate: 45, y: 18, width : 36 } : { rotate: 0, y: 0 }}
+              transition={{ duration: 0.3 }}
+            />
+            <motion.span
+              className="hamburger-2 w-[30px] h-[3px] bg-amber-50"
+              animate={open ? { scaleX: 0 } : { scaleX: 1 }}
+              transition={{ duration: 0.3 }}
+            />
+            <motion.span
+              className="hamburger-3 w-[30px] h-[3px] bg-amber-50"
+              animate={open ? { rotate: -45, y: -12, width : 36 } : { rotate: 0, y: 0 }}
+              transition={{ duration: 0.3 }}
+            />
+          </motion.div>
           
         </motion.div>
         <div className="group-div-goo" style={{ filter: "url(#goo)", position : "absolute" , zIndex : 1, paddingRight : 80 }}>

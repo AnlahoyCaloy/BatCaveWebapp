@@ -13,7 +13,7 @@ const ActionButtonGroup = () => {
   }, [])
 
   return (
-    <div className='action-button-group h-[120px] w-[500px]'>
+    <div className='action-button-group h-[120px] w-[500px] p-10 px-10'>
       <ActionButtons
         ref={(el) => {buttonRefs.current[0] = el}}
         fill="#783D18"
