@@ -1,54 +1,87 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useRef } from 'react'; 
+import { ResponsiveContainer, StackedCarousel } from 'react-stacked-center-carousel'
+import Card from './Card';
+import { data } from './Card';
 
-export const data = [
-  {
-    cover: "https://images6.alphacoders.com/679/thumb-1920-679459.jpg",
-    title: "Interstaller",
-  },
-  {
-    cover: "https://images2.alphacoders.com/851/thumb-1920-85182.jpg",
-    title: "Inception",
-  },
-  {
-    cover: "https://images6.alphacoders.com/875/thumb-1920-875570.jpg",
-    title: "Blade Runner 2049",
-  },
-  {
-    cover: "https://images6.alphacoders.com/114/thumb-1920-1141749.jpg",
-    title: "Icon man 3",
-  },
-  {
-    cover: "https://images3.alphacoders.com/948/thumb-1920-948864.jpg",
-    title: "Venom",
-  },
-  {
-    cover: "https://images2.alphacoders.com/631/thumb-1920-631095.jpg",
-    title: "Steins Gate",
-  },
-  {
-    cover: "https://images4.alphacoders.com/665/thumb-1920-665242.png",
-    title: "One Punch Man",
-  },
-  {
-    cover: "https://images2.alphacoders.com/738/thumb-1920-738176.png",
-    title: "A Silent Voice",
-  },
-  {
-    cover: "https://images8.alphacoders.com/100/thumb-1920-1005531.jpg",
-    title: "Demon Slayer",
-  },
-  {
-    cover: "https://images2.alphacoders.com/582/thumb-1920-582804.png",
-    title: "Attack On Titan",
-  },
-];
 
-const Carousel : React.FC = () => {
+interface CarouselProps {
+  parentWidth : number
+}
 
+
+const Carousel : React.FC<CarouselProps> = ({ parentWidth }) => {
+  // uses react-stacked-center-carousel by BotDanny thanks
+  const carouselRef = useRef<StackedCarousel | undefined>(undefined);
+
+  useEffect(() => {
+    if(carouselRef) {
+      console.log(carouselRef.current);
+    }
+  }, [])
 
   return (
-    <div>
+    <div style={{ width : "100%" , position : "relative" }}>
+      <ResponsiveContainer
+        carouselRef={carouselRef}
+        render={(parentWidth , carouselRef)=> {
+
+          let currentVisibleSlide: number;
+          if (parentWidth <= 1440) {
+            currentVisibleSlide = 3;
+          } else if (parentWidth <= 1080) {
+            currentVisibleSlide = 1;
+          } else {
+            currentVisibleSlide = 5
+          }
+
+          return (
+            <StackedCarousel 
+              ref={carouselRef}
+              slideComponent={Card}
+              slideWidth={parentWidth < 800 ? parentWidth - 40 : 750}
+              carouselWidth={parentWidth}
+              data={data}
+              currentVisibleSlide={currentVisibleSlide}
+              maxVisibleSlide={5}
+              useGrabCursor
+            >
+            </StackedCarousel>
+          )
+        }}
+      />
+      <>
+        <button className='bg-[#935935] w-[60px] flex items-center justify-center h-[60px] p-4 absolute ' style={{
+          top : "40%",
+          cursor : "pointer",
+          left : "120px",
+          zIndex : "10",
+          borderRadius : "50px"
+        }} onClick={() => {
+          carouselRef.current?.goBack();
+        }}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="19" y1="12" x2="5" y2="12" />
+            <polyline points="12 19 5 12 12 5" />
+          </svg>
+        </button>
+
+        <button className='bg-[#935935] w-[60px] flex items-center justify-center h-[60px] p-4 absolute ' style={{
+          top : "40%",
+          cursor : "pointer",
+          right : "120px",
+          zIndex : "10",
+          borderRadius : "50px"
+        }} onClick={() => {
+          carouselRef.current?.goNext(6)
+        }}>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="5" y1="12" x2="19" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </button>
+      </>
 
     </div>
   )

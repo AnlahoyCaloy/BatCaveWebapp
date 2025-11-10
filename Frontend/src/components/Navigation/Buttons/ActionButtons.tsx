@@ -122,6 +122,7 @@ const ActionButtons = forwardRef<ActionButtonRef, ActionButtonProps>(
           animate={{
             scale: isShrunk ? 1 : 1.5, // shrink or return
           }}
+          transition={{ type : "spring" , stiffness : 200 , damping : 10 }}
         > 
           <motion.div className="hamburger flex flex-col gap-3">
             <motion.span

@@ -1,5 +1,12 @@
 @import "tailwindcss";
 
+
+/* Incrase the height of the slide component and its 'height' prop to 
+   lenghten its size. */
+.my-slide-component {
+  height: 50vh; /* 50% of viewport height */ 
+} 
+
 .button::after {
   content: "";
   position: absolute;

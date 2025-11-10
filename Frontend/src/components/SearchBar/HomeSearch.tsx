@@ -8,7 +8,7 @@ const HomeSearch = () => {
   }
 
   return (
-    <div className='h-[180px] flex justify-center items-center w-full'>
+    <div className='h-[120px] flex justify-center items-center w-full'>
       <SearchBar onSearch={handleSearch} placeholder='Search for Drinks...' />      
     </div>
   )

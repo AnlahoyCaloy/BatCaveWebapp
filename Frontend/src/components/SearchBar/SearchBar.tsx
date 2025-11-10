@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 
 interface SearchBarProps {
@@ -18,8 +18,7 @@ const SearchBar :React.FC<SearchBarProps> = ({placeholder = "Search for Drinks..
   function handleKeyPress(e : React.KeyboardEvent<HTMLInputElement>) {
     if(e.key === "Enter") handleQuery();
   }
-
-
+  
   return (
     <div className='search-bar flex gap-5 items-center'>
       <section className='input-container '>

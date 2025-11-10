@@ -4,8 +4,6 @@ import "./globals.css";
 import NavBar from "../components/Navigation/NavBar";
 import localFont from 'next/font/local';
 
-
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
