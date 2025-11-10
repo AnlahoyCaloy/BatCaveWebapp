@@ -4,8 +4,16 @@
 /* Incrase the height of the slide component and its 'height' prop to 
    lenghten its size. */
 .my-slide-component {
-  height: 50vh; /* 50% of viewport height */ 
+  height: 55vh; /* 50% of viewport height */
+  display: flex;
+  justify-content: center;
+  align-items: center; 
 } 
+/* override the RSCC because it automatically configure things */
+.react-stacked-center-carousel  {
+  display: flex !important;
+  align-items: center !important;
+}
 
 .button::after {
   content: "";

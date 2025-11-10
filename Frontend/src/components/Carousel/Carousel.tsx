@@ -3,8 +3,8 @@ import React, { useEffect } from 'react'
 import { useRef } from 'react'; 
 import { ResponsiveContainer, StackedCarousel } from 'react-stacked-center-carousel'
 import Card from './Card';
-import { data } from './Card';
-
+import { coffeeProducts } from './Card';
+import { motion } from 'framer-motion'
 
 interface CarouselProps {
   parentWidth : number
@@ -16,13 +16,14 @@ const Carousel : React.FC<CarouselProps> = ({ parentWidth }) => {
   const carouselRef = useRef<StackedCarousel | undefined>(undefined);
 
   useEffect(() => {
-    if(carouselRef) {
-      console.log(carouselRef.current);
-    }
+    // if(carouselRef) {
+    //   console.log(carouselRef.current);
+    // }
+    console.log(parentWidth)
   }, [])
 
   return (
-    <div style={{ width : "100%" , position : "relative" }}>
+    <div style={{ width : "100%", position : "relative" }}>
       <ResponsiveContainer
         carouselRef={carouselRef}
         render={(parentWidth , carouselRef)=> {
@@ -39,13 +40,14 @@ const Carousel : React.FC<CarouselProps> = ({ parentWidth }) => {
           return (
             <StackedCarousel 
               ref={carouselRef}
-              slideComponent={Card}
-              slideWidth={parentWidth < 800 ? parentWidth - 40 : 750}
+              slideComponent={Card} 
+              slideWidth={parentWidth < 800 ? parentWidth - 40 : 400}
               carouselWidth={parentWidth}
-              data={data}
+              data={coffeeProducts} // goes into the 'Card' Component
               currentVisibleSlide={currentVisibleSlide}
               maxVisibleSlide={5}
               useGrabCursor
+              height={500}
             >
             </StackedCarousel>
           )
@@ -55,7 +57,7 @@ const Carousel : React.FC<CarouselProps> = ({ parentWidth }) => {
         <button className='bg-[#935935] w-[60px] flex items-center justify-center h-[60px] p-4 absolute ' style={{
           top : "40%",
           cursor : "pointer",
-          left : "120px",
+          left : "170px",
           zIndex : "10",
           borderRadius : "50px"
         }} onClick={() => {
@@ -70,7 +72,7 @@ const Carousel : React.FC<CarouselProps> = ({ parentWidth }) => {
         <button className='bg-[#935935] w-[60px] flex items-center justify-center h-[60px] p-4 absolute ' style={{
           top : "40%",
           cursor : "pointer",
-          right : "120px",
+          right : "170px",
           zIndex : "10",
           borderRadius : "50px"
         }} onClick={() => {
