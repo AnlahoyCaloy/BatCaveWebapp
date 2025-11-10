@@ -1,4 +1,5 @@
 // import RandomNumber from "../components/RandomNumber";
+import Link from "next/link";
 import CarouselContainer from "../components/Carousel/CarouselContainer";
 import NewBrewsSection from "../components/NewBrewsComp/NewBrewsSection";
 import HomeSearch from "../components/SearchBar/HomeSearch";
@@ -25,9 +26,14 @@ export default function Home() {
       <Section color="var(--color-silk-cream)" 
       style={{ 
         fontFamily : "var(--font-Cinzel)",
+        // justifyContent : "center"
+        alignItems : "center",
+        gap : "60px"
       }}>
 
         <NewBrewsSection />
+
+        <Link href={"/drinks"}><h1 className="text-[35px]">See all Drinks</h1></Link>
       </Section>
     </div>
   )

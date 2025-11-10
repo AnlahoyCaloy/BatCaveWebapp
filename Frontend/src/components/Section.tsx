@@ -12,8 +12,8 @@ interface SectionProps {
 const Section : React.FC<SectionProps> = ({ children , color , navBarHeight , className, style}) => {
   console.log(navBarHeight)
   return (
-    <div className={`w-full flex-col flex  ${className || ''}`} style={{
-      height : `calc(100vh - ${navBarHeight || 0}px)`,
+    <div className={`w-full flex-col flex-1 flex  ${className || ''}`} style={{
+      minHeight : `calc(100vh - ${navBarHeight || 0}px)`,
       backgroundColor : color,// minus the navbars height
       ...style
     }}>

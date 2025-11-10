@@ -2,9 +2,8 @@
 import React from "react";
 import { motion, Variants, easeOut } from "framer-motion";
 import NewBrewsCard from "./NewBrewsCard";
-import CoffeeCarousel, { coffeeData } from "./CoffeeCarousel";
 
-
+// DUMMY DATA
 export const brewsData = [
   {
     id: 1,
