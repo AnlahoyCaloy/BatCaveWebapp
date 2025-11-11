@@ -34,9 +34,8 @@ export default function Home() {
 
         <NewBrewsSection />
 
-        <Link href={"/drinks"}><h1 className="text-[35px]" style={{ color : "var(--color-coffee-medium)" }}>See all Drinks</h1></Link>
+        <Link href={"/menu"}><h1 className="text-[35px]" style={{ color : "var(--color-coffee-medium)" }}>See all Drinks</h1></Link>
       </Section>
-      <Footer />
     </div>
   )
 }
