@@ -12,6 +12,7 @@ import { Room } from './RoomCard';
 // - Study reservations can share a date as long as total pax for that date does not exceed 20 and there's no overlapping exclusive function.
 // - Function reservations are exclusive: if a function reservation exists overlapping a time, no study reservations are allowed during that time (and vice-versa)
 // - Reservation times are considered overlapping if they share any time on the same date.
+// WILL ANALYZE THIS MORE IN THE FUTURE 
 
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
@@ -39,8 +40,13 @@ export function reservationOverlap(startA: string, endA: string, startB: string,
   return aStart.isBefore(bEnd) && aEnd.isAfter(bStart);
 }
 
-const AvailableRooms = () => {
 
+
+const AvailableRooms = () => {
+  const [timeNow , setTimeNow] = useState(dayjs())
+  useEffect(() => {
+    console.log(timeNow)
+  })
   const [room , setRoom] = useState
   (initialDummyRoomsFromDatabase);
 
@@ -58,9 +64,11 @@ const AvailableRooms = () => {
 
     // first check if its within operating hours
     if(!withinOperatingHours(r.start , r.end, opStart, opEnd)) {
-      return { success : false , message : "Need to be within 1pm to 10pm" }
+      return { success : false , message : "Time Needs to be within 1pm to 10pm" }
     }
-    // then check if the exisisting reservations overlapped with the current reservation input
+
+    // then check if the exisisting reservations overlapped with the current reservation input 
+    // if same day and overlapping time
     const overlapping = currentRoom.reservation.filter((existingReservation , i) => {
       if(existingReservation.date === r.date && reservationOverlap(existingReservation.start, existingReservation.end , r.start , r.end)) {
         // if true
@@ -69,21 +77,43 @@ const AvailableRooms = () => {
       return false
     })
 
-
     console.log(overlapping)
+    
     if(r.type === "study") {
       const overlappingfunction = overlapping.filter(o => o.type === "function") 
-      if (overlappingfunction) return {success : false , message : "Can't reserve during function"}
+      if (overlappingfunction.length > 0 ) return {success : false , message : "Can't reserve during a function"}
 
-      const totalPax = overlapping.reduce((sum, current) => )
-    }
+      const overlappingStudy = currentRoom.reservation.filter(
+        o => o.type === "study" && reservationOverlap(o.start , o.end , r.start, r.end) && o.date === r.date
+      ) // o is each of the study times that will overlap the input user
+      
 
-    if(r.pax > currentRoom.capacity) {
-      return { success : false , message : "Pax must be minimum greater than 20" }
-    }
-    console.log(r.)
-    const newReservation = {id : `${Date.now()*100}`,}
-    
+      const totalPax = overlappingStudy.reduce((sum, current) => sum + current.pax, 0) + r.pax
+      console.log(totalPax)
+      // const totalPax = overlapping
+      // .filter(o => o.type === "study")
+      // .reduce((sum , current) => sum + current.pax , 0) + r.pax
+      // sum up all the reservations overlapping with type study and add the input pax
+      if(totalPax > currentRoom.capacity) {
+        return { success : false  , message : "Pax exceed maximum limit"}
+      }
+    } 
+
+    const newReservation = {id : Date.now() * 100, ...r}
+    setRoom(prev => // get the roooms
+      prev.map(room => { // loop through the rooms 
+        if(room.id === roomId) { // if the id of one of the rooms is the same as the one we inputted which is the what we loop through in the return of this whole component
+          return {
+            ...room, // copy the whole room object  // except the reservation 
+            reservation : [...room.reservation , newReservation], // copy the whole reservation of that specific room and add the newReservation object 
+          }
+        }
+        return room;
+      })
+    )
+
+
+
   }
 
   return (

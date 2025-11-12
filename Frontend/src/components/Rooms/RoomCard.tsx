@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react'
-
+// WILL ANALYZE THIS MORE IN THE FUTURE 
 export type RoomType = "study" | "function"
 
 
@@ -28,20 +28,20 @@ interface RoomCardProps {
 const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
   const [showForm, setShowForm] = useState(false)
   const [date, setDate] = useState('')
-  const [start, setStart] = useState('01:00')
-  const [end, setEnd] = useState('10:00')
+  const [start, setStart] = useState('13:00')
+  const [end, setEnd] = useState('22:00')
   const [pax, setPax] = useState<number>(1)
   const [feedback, setFeedback] = useState<string | null>(null)
   const [type ,setType] = useState<RoomType>("study")
-  
+  const [status ,setStatus] = useState("Available")
 
   function handleSubmit(e: React.FormEvent) {
     
     e.preventDefault()
 
     console.log({date , start , end , pax, type})
-
-    if (!date) {
+    
+    if (!date || date === "") {
       setFeedback('Please select a date')
       return;
     }
@@ -56,7 +56,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
   }
 
   return (
-    <div className="room-card p-4 bg-white rounded-md shadow-md" style={{ borderRadius: 12 }}>
+    <div className="room-card p-4 bg-white text-black rounded-md shadow-md" style={{ borderRadius: 12 }}>
       <div className="flex justify-between items-start">
         <div>
           <h3 className="text-lg font-semibold">{room.name}</h3>
