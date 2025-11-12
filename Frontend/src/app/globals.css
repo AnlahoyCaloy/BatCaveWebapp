@@ -103,3 +103,55 @@ body {
     mask: none;
    }
 }
+
+
+/* ===== for the main menu ===== */
+@media (max-width : 1180px) {
+  .menu-container {
+    grid-template-columns: repeat(1 , minmax(0 ,1fr));
+  }
+}
+
+@media (max-width : 767px) {
+  .menu-inner-container {
+    align-items: center;
+  }
+}
+
+@media (max-width : 375px) {
+  .menu-inner-container {
+    align-items: center;
+  }
+  .inner-menu-card {
+    flex-direction: column;
+    gap : 20px;
+  }
+  .info {
+    padding-left: 0px;
+  }
+  .menu-card {
+    height: 100%;
+  }
+}
+@media (max-width : 480px) {
+  /* .menu-card {
+    height: 200px;
+  } */
+  .inner-menu-card {
+    aspect-ratio: auto;
+    flex-direction: column;
+    gap: 15px;
+  }
+  .cover-container {
+    width: 90%;
+    height: 180px;
+  }
+  .add-to-cart-btn {
+    width: 100%;
+    text-align: center;
+  }
+  .info {
+    padding-left: 0;         /* remove left padding */
+    width: 100%;             /* make info take full width */
+  }
+}

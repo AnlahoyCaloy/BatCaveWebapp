@@ -6,11 +6,12 @@ import { coffeeProducts } from '@/src/components/Carousel/Card'
 import { dummyCategories } from '@/src/components/Menu/MenuSideBar'
 
 
-const Menu : React.FC = () => {
+const Menu = () => {
   return (
-    <div className='menu-container w-full relative'>
+    <div className='menu-container w-full relative'
+    style={{ fontFamily : "var(--font-inter)" }}>
       <Section isAnimated={false}
-      style={{ display : "flex" , flexDirection : "row", gap : "30px", justifyContent : "center", marginTop : "70px"}}>
+      style={{ display : "flex", gap : "30px", justifyContent : "center", marginTop : "70px", padding : "20px"}} className='menu-inner-container md:flex-row' >
 
         <div className='menu-sidebar h-full'>
           {/* sidbar component */}
@@ -18,7 +19,7 @@ const Menu : React.FC = () => {
         </div>
 
         <h1 className='absolute z-1 p-4 w-[210px]'
-        style={{ backgroundColor : "var(--color-coffee-medium)", top: "-40px", borderRadius : "25px"}}>Category</h1>
+        style={{ backgroundColor : "var(--color-coffee-medium)", top: "-20px", borderRadius : "25px"}}>Category</h1>
 
         <div className='main-menu h-full'>
           <MainMenu data={coffeeProducts}/> {/* for visualization only */}

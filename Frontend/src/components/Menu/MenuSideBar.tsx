@@ -1,6 +1,8 @@
 "use client"
 import React from 'react'
 import CategoryButton from './CategoryButton'
+import '../../app/globals.css'
+
 
 export const dummyCategories = [ "Specialty Coffees" , "Pastries" , "Snacks" ]
 
@@ -11,8 +13,8 @@ interface SideBarProps {
 const MenuSideBar : React.FC<SideBarProps> = ({ categories }) => {
   return (
     <div className='categories w-full'>
-      <section className='w-[300px] h-[630px]' style={{ backgroundColor : "var(--color-coffee-dark)", borderRadius : "20px", boxShadow : "var(--shadow-custom)" }}> 
-        <div className='cat-buttons flex flex-col p-4 pt-8 items-center gap-4'>
+      <section className='w-full' style={{ backgroundColor : "var(--color-coffee-dark)", borderRadius : "20px", boxShadow : "var(--shadow-custom)" }}> 
+        <div className='cat-buttons w-full flex flex-col p-8 items-center gap-4'>
           {/* <CategoryButton /> */}
           {
             categories.map((c , i) => (

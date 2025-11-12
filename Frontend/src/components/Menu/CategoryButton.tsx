@@ -1,12 +1,13 @@
 "use client"
 import React from 'react'
 import { motion } from 'framer-motion'
+import '../../app/globals.css'
+
 interface CategoryProps {
   category? : string
 }
 
 const CategoryButton : React.FC<CategoryProps> = ({ category }) => {
-  console.log(category)
 
   return (
     <motion.div className='category-btn cursor-pointer w-[200px] h-[70px] pl-4 items-center flex'
