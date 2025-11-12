@@ -11,8 +11,7 @@ const Menu = () => {
     <div className='menu-container w-full relative'
     style={{ fontFamily : "var(--font-inter)" }}>
       <Section isAnimated={false}
-      style={{ display : "flex", gap : "30px", justifyContent : "center", marginTop : "70px", padding : "20px"}} className='menu-inner-container md:flex-row' >
-
+      style={{ display : "flex", gap : "30px", justifyContent : "center", marginTop : "40px", padding : "20px"}} className='menu-inner-container md:flex-row' >
         <div className='menu-sidebar h-full'>
           {/* sidbar component */}
           <MenuSideBar categories={dummyCategories} /> {/* for visualization only */}

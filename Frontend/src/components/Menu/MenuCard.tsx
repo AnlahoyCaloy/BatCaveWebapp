@@ -18,7 +18,7 @@ const MenuCard : React.FC<MenuCardProps> = ({cover , description ,value}) => {
     style={{ borderRadius : "10px", backgroundColor : "var(--color-accent)", boxShadow : "var(--shadow-custom)" }}
     initial={{ y : 0 }}
     whileHover={{ y : -10 }}>
-      <section className='inner-menu-card w-full p-1.5 max-w-[450px] aspect-[5/2] flex'>
+      <section className='inner-menu-card w-full p-1.5 max-w-[450px] aspect-[5/2] flex items-center'>
         <div className='cover-container h-full w-[210px] relative rounded-[25px] overflow-hidden'>
           <Image 
             src={cover} 

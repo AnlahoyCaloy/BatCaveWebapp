@@ -141,6 +141,7 @@ body {
     aspect-ratio: auto;
     flex-direction: column;
     gap: 15px;
+    align-items: center;
   }
   .cover-container {
     width: 90%;
@@ -152,6 +153,7 @@ body {
   }
   .info {
     padding-left: 0;         /* remove left padding */
-    width: 100%;             /* make info take full width */
+    width: 100%;
+    height: 100%;            /* make info take full width */
   }
 }

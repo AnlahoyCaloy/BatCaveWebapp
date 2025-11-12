@@ -1,11 +1,12 @@
 "use client"
 import React from 'react'
+import '../../app/globals.css'
 
 const Footer : React.FC = () => {
   return (
-    <footer className='w-full min-h-[30vh] flex flex-col sm:flex-col flex-wrap justify-center items-center gap-6 p-6'
+    <footer className='w-full min-h-[30vh] flex flex-col sm:flex-col flex-wrap justify-center items-center gap-5 p-6'
     style={{ backgroundColor : "var(--background)" }}>
-      <div className='w-full flex justify-evenly '>
+      <div className='w-full flex justify-evenly'>
         <section className='contact-us flex flex-col gap-2 text-center'>
           <p>631234567890</p>
           <p>BatCaveCafé@gmail.com</p>
