@@ -30,7 +30,7 @@ const Section : React.FC<SectionProps> = ({ children , color , navBarHeight , cl
     variants={animationVariant}
     initial={isAnimated ? "hidden" : undefined}
     whileInView={isAnimated ? "scrollView" : undefined}
-    viewport={isAnimated ? { once : true , margin : "-500px"} : undefined}
+    viewport={isAnimated ? { once : true , margin : "-200px"} : undefined}
     className={`w-full h-full flex-col flex-1 flex  ${className || ''}`} style={{
       minHeight : `calc(100vh - ${navBarHeight || 0}px)`, // minus the navbars height
       backgroundColor : color,
