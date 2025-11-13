@@ -15,11 +15,13 @@ Quick start
 php scripts/init_db.php
 ```
 
-2. Start the PHP built-in server from the Backend folder:
+2. Start the PHP built-in server from the Backend folder :
 
 ```powershell
 php -S localhost:8000 -t public
 ```
+
+PS. i recommend XAMPP
 
 3. Endpoints
 
