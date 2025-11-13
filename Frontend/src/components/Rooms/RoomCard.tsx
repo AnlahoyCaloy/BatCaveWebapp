@@ -1,9 +1,12 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 // WILL ANALYZE THIS MORE IN THE FUTURE 
-export type RoomType = "study" | "function"
 
+export enum RoomType {
+  Study = "Study" ,
+  Function = "Function"
+}
 
 export interface Room { // get from database
   id : number,
@@ -13,51 +16,64 @@ export interface Room { // get from database
   image?: string // optional path or url to room image (e.g. '/images/coffee1.png')
 }
 
+enum ReservationStatus {
+  Pending = "Pending",
+  Ongoing = "Ongoing",
+  Completed = "Completed",
+  NoShow = "No-show",
+  Cancelled = "Cancelled"
+}
+
 export interface Reservations {
   id : number,
   date : string
   start : string,
   end : string,
   pax : number,
-  type : RoomType
+  type : RoomType,
+  status : ReservationStatus
 }
 
 interface RoomCardProps {
   room : Room,
   onReserve : (roomId : number , r : Omit<Reservations, 'id'>) => { success : boolean , message? : string }
 }
+
+
 // when this fires sends it to 
 const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
-  const [showForm, setShowForm] = useState(false)
-  const [date, setDate] = useState('')
-  const [start, setStart] = useState('13:00')
-  const [end, setEnd] = useState('22:00')
-  const [pax, setPax] = useState<number>(1)
-  const [feedback, setFeedback] = useState<string | null>(null)
-  const [type ,setType] = useState<RoomType>("study")
+  const [showUserForm, setShowUserForm] = useState(false);
+  const [showReservationForm, setShowReservationForm] = useState(false);
+  const [date, setDate] = useState('');
+  const [start, setStart] = useState('13:00');
+  const [end, setEnd] = useState('22:00');
+  const [pax, setPax] = useState<number>(1);
+  const [feedback, setFeedback] = useState<string | null>(null);
+  const [type ,setType] = useState<RoomType>(RoomType.Study);
+  const [status , setStatus] = useState<ReservationStatus>(ReservationStatus.Pending);
 
   function handleSubmit(e: React.FormEvent) {
-    
     e.preventDefault()
 
-    console.log({date , start , end , pax, type})
+    console.log({date , start , end , pax, type, status})
     
     if (!date || date === "") {
       setFeedback('Please select a date')
       return;
     }
 
-    const res = onReserve(room.id, { date, start, end, pax , type})
+    const res = onReserve(room.id, { date, start, end, pax , type, status})
     if (!res.success) {
       setFeedback(res.message || 'Could not reserve')
     } else {
       setFeedback('Reserved successfully')
-      setShowForm(false)
+      setShowReservationForm(false)
     }
-  }
+  } 
+
 
   return (
-    <div className="room-card w-full max-w-[900px] p-4 text-black rounded-md shadow-md" style={{ borderRadius: 12 , backgroundColor : "var(--color-coffee-dark)"}}>
+    <div className="room-card w-full max-w-[900px] p-4 text-black rounded-md shadow-md" style={{ borderRadius: 12 , backgroundColor : "var(--color-coffee-dark)", boxShadow : "var(--shadow-custom)"}}>
       {/* Top image */}
       <div className="w-full h-[500px] relative rounded overflow-hidden mb-4" style={{ borderRadius: 8 }}>
         <Image
@@ -77,13 +93,16 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
           <div className='room-status text-black-600'>{room.reservation.length} reservations</div>
         </div>
         <div>
-          <button className="px-3 py-1 bg-blue-600 text-white rounded" onClick={() => setShowForm(s => !s)}>
-            {showForm ? 'Cancel' : 'Reserve'}
+          <button className="px-3 py-1 bg-blue-600 text-white rounded" onClick={() => setShowReservationForm(s => !s)}>
+            {showReservationForm ? 'Cancel' : 'Reserve'}
           </button>
         </div>
       </div>
 
-      {showForm && (
+
+
+      {/* Input Reservation Form */}
+      {showReservationForm && (
         <form onSubmit={handleSubmit} className="mt-4 space-y-3">
           <div>
             <label className="text-sm">Date</label>
@@ -142,15 +161,15 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
                 value={type}
                 onChange={(e) => setType(e.target.value as RoomType)}
               >
-                <option value="study">Study</option>
-                <option value="function">Function</option>
+                <option value={RoomType.Study}>Study</option>
+                <option value={RoomType.Function}>Function</option>
               </select>
             </div>
           </div>
 
           <div className="flex gap-2 mt-2">
             <button className="px-4 py-2 bg-green-600 text-white rounded" type="submit">Confirm</button>
-            <button type="button" className="px-4 py-2 bg-gray-200 rounded" onClick={() => setShowForm(false)}>Close</button>
+            <button type="button" className="px-4 py-2 bg-gray-200 rounded" onClick={() => setShowReservationForm(false)}>Close</button>
           </div>
         </form>
       )}

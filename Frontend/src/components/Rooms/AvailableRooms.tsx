@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import dayjs from 'dayjs'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
-import RoomCard from './RoomCard';
+import RoomCard, { RoomType } from './RoomCard';
 import { Reservations } from './RoomCard';
 import { Room } from './RoomCard';
 import Section from '../Section';
@@ -46,14 +46,15 @@ const initialDummyRoomsFromDatabase : Room[] = [
 const AvailableRooms = () => {
   const [timeNow , setTimeNow] = useState(dayjs().format("DD:MM:HH:mm:ss"))
 
-  const [room , setRoom] = useState
-  (initialDummyRoomsFromDatabase);
+  const [room , setRoom] = useState(initialDummyRoomsFromDatabase);
   const [reservations , setReservations] = useState(room[0].reservation)
 
   useEffect(() => {
-    if(reservations) {
-      console.log(reservations)
-    }
+    reservations.map((r, i) => {
+      if(r) {
+        console.log("reservation created at " + r.date)
+      }
+    })
   })
 
   // this is what the user inputted
@@ -82,15 +83,13 @@ const AvailableRooms = () => {
       }
       return false
     })
-
-    console.log(overlapping)
     
-    if(r.type === "study") {
-      const overlappingfunction = overlapping.filter(o => o.type === "function") 
+    if(r.type === RoomType.Study) {
+      const overlappingfunction = overlapping.filter(o => o.type === RoomType.Function) 
       if (overlappingfunction.length > 0 ) return {success : false , message : "Can't reserve during a function"}
 
       const overlappingStudy = currentRoom.reservation.filter(
-        o => o.type === "study" && reservationOverlap(o.start , o.end , r.start, r.end) && o.date === r.date
+        o => o.type === RoomType.Study && reservationOverlap(o.start , o.end , r.start, r.end) && o.date === r.date
       ) // o is each of the study times that will overlap the input user
       
 

@@ -17,7 +17,7 @@ const MainMenu : React.FC<MainMenuProps> = ({ data }) => {
       <SimpleBar
         style={{ backgroundColor : "var(--color-coffee-dark)", boxShadow : "var(--shadow-custom)", borderRadius : "20px"}}
         autoHide={true}
-        className='relative w-full max-w-[1000px] h-[650px] grid sm:grid-cols-1 md:grid-cols-2 gap-4'
+        className='relative w-full max-w-[1000px] h-[750px] grid sm:grid-cols-1 md:grid-cols-2 gap-4'
       >
         <section className='menu-container relative h-[650px] grid sm:grid-cols-1 md:grid-cols-2 p-7 gap-4' style={{ borderRadius : "20px"}}>
           {
