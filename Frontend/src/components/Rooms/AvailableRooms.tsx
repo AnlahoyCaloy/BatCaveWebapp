@@ -46,7 +46,7 @@ const initialDummyRoomsFromDatabase : Room[] = [
 
 const AvailableRooms = () => {
   const [timeNow , setTimeNow] = useState(dayjs().format("DD:MM:HH:mm:ss"))
-
+  
   const [room , setRoom] = useState(initialDummyRoomsFromDatabase);
   const [reservations , setReservations] = useState(room[0].reservation)
 
@@ -54,6 +54,7 @@ const AvailableRooms = () => {
     reservations.map((r, i) => {
       if(r) {
         console.log("reservation created at " + r.date)
+        console.log(r)
       }
     })
   })
@@ -67,8 +68,8 @@ const AvailableRooms = () => {
       return { success : false , message : "Room not found in database"}
     }
   
-    const opStart = '13:00' // 1pm
-    const opEnd = '22:00' // 10pm
+    const opStart = '13:00' // 1pm start of operation hours
+    const opEnd = '22:00' // 10pm end of operation hours
 
     // first check if its within operating hours
     if(!withinOperatingHours(r.start , r.end, opStart, opEnd)) {

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import UserShow from './UserShow'
 // WILL ANALYZE THIS MORE IN THE FUTURE 
-
+// WILL USE CONTEXT FOR BETTER STATE MANAGEMENT AND FOR REAL AUTHORIZATION
 export enum RoomType {
   Study = "Study" ,
   Function = "Function"
@@ -26,7 +26,7 @@ enum ReservationStatus {
 
 export interface Reservations {
   id : string,
-  userId : string
+  userId : string // foreign key to the users table
   date : string
   start : string,
   end : string,
@@ -38,12 +38,12 @@ export interface Reservations {
 export interface User {
   userId : string,
   name : string,
-  phone : string
+  phone : string,
 }
 
 interface RoomCardProps {
   room : Room,
-  onReserve : (roomId : number , r : Omit<Reservations, 'id'>) => { success : boolean , message? : string, reservationdId? : string }
+  onReserve : (roomId : number , r : Omit<Reservations, 'id'>) => { success : boolean , message? : string, reservationId? : string }
 }
 
   const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
@@ -57,9 +57,14 @@ interface RoomCardProps {
 
     const [userId, setUserId] = useState<string | null>(() => typeof window !== 'undefined' ? localStorage.getItem('userId') : null)
 
-    const [reservationId, setReservationId] = useState<string | null>(() => {
-      try { return typeof window !== 'undefined' ? String(localStorage.getItem('reservationId')) || null : null } catch { return null }
-    })
+    const [reservationId, setReservationId] = useState<string | null>(() => (
+      localStorage.getItem("reservationId") || null
+    ))
+
+    function onSaveUser(userId : string , name : string, phone : string, reservationId : string | null) {
+      // localStorage.setItem("reservationId" , reservationId || "")
+      // store this in the database
+    }
 
     async function handleSubmit(e: React.FormEvent) {
       e.preventDefault()
@@ -77,6 +82,10 @@ interface RoomCardProps {
       setFeedback(res.message || 'Could not reserve')
       setShowReservationForm(true);
     } else {
+      if (res.reservationId) {
+        localStorage.setItem('reservationId', res.reservationId)
+        setReservationId(res.reservationId)
+      }
       setFeedback('Reserved successfully')
       setShowReservationForm(false);
     }
@@ -84,12 +93,26 @@ interface RoomCardProps {
 
   // if user doesnt have infor show this 
   if (!userId) {
-    return <UserShow onSaveUser={setUserId} />;
+    return <UserShow onSaveUser={onSaveUser} />;
+  }
+
+  
+  if (userId && reservationId) { 
+    const name = localStorage.getItem("userName")
+    const phone = localStorage.getItem("userPhone")
+    return (
+      <div className="p-4 bg-gray-100 rounded shadow text-black">
+        <h4 className="font-semibold">Welcome , {name}.You are already Reserved.</h4>
+        <p>Phone: {phone}</p>
+        <p>Your Reservation id is {reservationId}</p>
+      </div>
+    )
+  } else {
+    console.log("Not in ")
   }
 
   return (
     <div className="room-card w-full max-w-[900px] p-4 text-black rounded-md shadow-md" style={{ borderRadius: 12 , backgroundColor : "var(--color-coffee-dark)", boxShadow : "var(--shadow-custom)"}}>
-      {/* Top image */}
       <div className="w-full h-[500px] relative rounded overflow-hidden mb-4" style={{ borderRadius: 8 }}>
         <Image
           // src={room.image || '/images/room.png'}
@@ -101,7 +124,6 @@ interface RoomCardProps {
         />
       </div>
     
-      {/* Header: title + button */}
       <div className="flex justify-between items-center">
         <div>
           <h3 className="text-lg font-semibold">{room.name}</h3>
@@ -116,7 +138,6 @@ interface RoomCardProps {
       </div>
 
 
-      {/* Input Reservation Form */}
       {showReservationForm && (
         <form onSubmit={handleSubmit} className="mt-4 space-y-3">
           <div>

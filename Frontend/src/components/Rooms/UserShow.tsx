@@ -3,9 +3,8 @@ import React, { useEffect } from 'react'
 import '../../app/globals.css'
 import { useState } from 'react'
 
-
 interface UserShowProps {
-  onSaveUser : (userId : string , name : string, phone : string, reservationId : string) => void
+  onSaveUser : (userId : string , name : string, phone : string, reservationId : string | null) => void
 }
 
 const UserShow : React.FC<UserShowProps> = ({ onSaveUser }) => {
@@ -15,7 +14,11 @@ const UserShow : React.FC<UserShowProps> = ({ onSaveUser }) => {
   const [message , setMessage] = useState<string | null>(null);
   const [reservationid , setReservationId] = useState<string | null>(() => localStorage.getItem("reservationId"));
 
-
+  const validatePhone = (phone: string) => {
+    // Simple regex for 10-12 digits (adjust for your locale)
+    return /^\d{10,12}$/.test(phone)
+  }
+  
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault()
     if (!name || !phone) {
@@ -23,27 +26,26 @@ const UserShow : React.FC<UserShowProps> = ({ onSaveUser }) => {
       return
     }
 
-    const newUserId = `${Date.now()}` // simple unique ID
+    if(!validatePhone(phone)) {
+      setMessage("Phone number must be 10-12 digits")
+    }
+
+    const newUserId = `U${Date.now()}` // simple unique ID
     localStorage.setItem('userId', newUserId)
     localStorage.setItem('userName', name)
     localStorage.setItem('userPhone', phone)
 
-    setUserId(newUserId)
+    setUserId(newUserId);
+    setReservationId(reservationid);
     onSaveUser(newUserId, name, phone, reservationid)
     setMessage('User saved successfully!')
   }
 
-   if (userId) {
-    return (
-      <div className="p-4 bg-gray-100 rounded shadow">
-        <h4 className="font-semibold">Welcome, {name}</h4>
-        <p>Phone: {phone}</p>
-      </div>
-    )
-  }
-
   return (
-    <form onSubmit={handleSave} className="p-4 bg-gray-100 rounded shadow space-y-3">
+    <form onSubmit={handleSave} className="p-4 bg-gray-100 rounded shadow flex flex-col gap-5 text-black" style={{
+      fontFamily : "var(--font-inter)"
+    }}>
+      <h3 className=''>We need basic information for us to allow reservations</h3>
       <h4 className="font-semibold">Enter your details</h4>
       <div>
         <label className="block text-sm mb-1">Name</label>
