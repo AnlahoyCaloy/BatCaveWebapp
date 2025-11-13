@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import UserShow from './UserShow'
+import axios from 'axios'
 // WILL ANALYZE THIS MORE IN THE FUTURE 
 // WILL USE CONTEXT FOR BETTER STATE MANAGEMENT AND FOR REAL AUTHORIZATION
 export enum RoomType {
@@ -62,10 +63,26 @@ interface RoomCardProps {
       localStorage.getItem("reservationId") || null
     ))
 
-    function onSaveUser(userId : string , name : string, phone : string, reservationId : string | null) {
+    const [userData ,setUserData] = useState({});
+
+    async function onSaveUser(userId : string , name : string, phone : string, reservationId : string | null) {
       // localStorage.setItem("reservationId" , reservationId || "")
       // store this in the database
+      const response = await axios.post('http://localhost/BatCave/backend/public/users', {
+        userId,
+        name,
+        phone
+      })
+      setUserData(response);
     }
+
+    useEffect(() => {
+      if(userData) {
+        console.log(userData);
+      } else {
+        console.log("User data not found");
+      }
+    }, [userData])
 
     async function handleSubmit(e: React.FormEvent) {
       e.preventDefault()
@@ -99,7 +116,7 @@ interface RoomCardProps {
 
   
   if (userId && reservationId) { 
-    // fetch from database the data
+    // fetch from database matching data of reservations and users
     const name = localStorage.getItem("userName")
     const phone = localStorage.getItem("userPhone")
     return (

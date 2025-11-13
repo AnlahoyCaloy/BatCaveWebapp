@@ -13,3 +13,10 @@ export function withinOperationHours(startA : string , endA : string , open : st
 
 
 }
+
+
+export function getHoursDiff(startTime: string, endTime: string): number {
+  const startDate = dayjs(`2000-01-01T${startTime}`);
+  const endDate = dayjs(`2000-01-01T${endTime}`);
+  return endDate.diff(startDate, 'hour', true); // true = decimal hours
+}
