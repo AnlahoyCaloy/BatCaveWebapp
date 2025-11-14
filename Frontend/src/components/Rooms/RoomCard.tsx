@@ -5,6 +5,7 @@ import UserShow from './UserShow'
 import axios from 'axios'
 import { apiPost } from '@/src/api/axios'
 import { useRouter } from 'next/navigation'
+import dayjs from 'dayjs'
 
 // WILL ANALYZE THIS MORE IN THE FUTURE 
 // WILL USE CONTEXT FOR BETTER STATE MANAGEMENT AND FOR REAL AUTHORIZATION
@@ -68,7 +69,7 @@ interface RoomCardProps {
       localStorage.getItem("reservationId") || null
     ))
 
-    const [reservationData, setReservationData] = useState(null);
+    const [reservationData, setReservationData] = useState<Reservations | null>(null);
 
     const [userData ,setUserData] = useState({});
 
@@ -137,19 +138,16 @@ interface RoomCardProps {
     fetchUserReservation();
   }, [userId]);
   // if user doesnt have infor show this 
+
   if (!userId) {
     return <UserShow onSaveUser={onSaveUser} />;
-  }
-
-    console.log(reservationData);
+  }  
   
-  
-  if (userId && reservationData) { 
+  if (userId && reservationData && reservationId) { 
     // fetch from database matching data of reservations and users
     const name = localStorage.getItem("userName")
     const phone = localStorage.getItem("userPhone")
-    console.log(reservationData);
-
+    
 
     return (
       <div className="p-4 bg-gray-100 rounded shadow text-black">
