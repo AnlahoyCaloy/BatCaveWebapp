@@ -28,7 +28,11 @@ export const apiGet = async (url : string)  => {
 
 export const apiPost = async (url : string, data : object) => {
     try {
-        const response = await axiosMain.post(url , data)  // url could be /reservations action=POST
+        const response = await axiosMain.post(url , data, {
+            headers : {
+                'Content-Type': 'application/json'
+            }
+        })  // url could be /reservations action=POST
         return {response : response , data : response.data};
     } catch (error) {
         if(axios.isAxiosError(error)) {

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 // --------------------
 // CORS HEADERS (must be first)
-// Handle preflight
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
     exit;
@@ -66,16 +65,13 @@ try {
     // --------------------
     // Routing
     $method = $_SERVER['REQUEST_METHOD'];
-    $uri = $_SERVER['REQUEST_URI'];
+    $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-    // Remove query string
-    $uri = parse_url($uri, PHP_URL_PATH);
-
-    // Adjust for your folder structure
     $basePath = '/BatCave/backend/public';
-    $route = substr($uri, strlen($basePath));
-    // substr cuts the first $basePath and just do '/rooms'
+    $route = '/' . trim(substr($uri, strlen($basePath)), '/'); // normalize
+    $route = $route === '/' ? '/' : '/' . ltrim($route, '/'); // ensure starting slash
 
+    // -------------------- Routes
     if ($route === '/rooms' && $method === 'GET') {
         echo json_encode($roomModel->getRooms());
         exit;
@@ -89,6 +85,17 @@ try {
 
     if ($route === '/reservations' && $method === 'GET') {
         echo json_encode($reservationModel->getReservations());
+        exit;
+    }
+
+    if ($route === '/reservations-by-user' && $method === 'POST') {
+        $data = json_decode(file_get_contents('php://input'), true);
+        $userId = $data['userId'] ?? null;
+        if ($userId) {
+            echo json_encode($reservationModel->getReservationsByUser($userId));
+        } else {
+            echo json_encode(['success' => false, 'message' => 'userId not provided']);
+        }
         exit;
     }
 
@@ -109,13 +116,13 @@ try {
         exit;
     }
 
+    // -------------------- 404 for anything else
     http_response_code(404);
     echo json_encode(['error' => 'Route not found']);
+    exit;
 
-
-    // Default
-    echo json_encode(["message" => "Connected to SQLite successfully!"]);
 } catch (PDOException $e) {
     http_response_code(500);
     echo json_encode(["error" => "Connection failed: " . $e->getMessage()]);
+    exit;
 }

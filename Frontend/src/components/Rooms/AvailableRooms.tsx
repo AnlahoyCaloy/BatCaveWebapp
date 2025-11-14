@@ -45,16 +45,11 @@ const initialDummyRoomsFromDatabase : Room[] = [
   {id : "ROOM1" , name : "Study Room" , capacity : 20, reservation : []}
 ]
 
-
-
-
-
 const AvailableRooms = () => {
   const [timeNow , setTimeNow] = useState(dayjs().format("DD:MM:HH:mm:ss"))
 
   const [room , setRoom] = useState(initialDummyRoomsFromDatabase);
   const [reservations , setReservations] = useState(room[0].reservation)
-  console.log(room)
 
   const fetchRoomData = async () => {
       const roomResponse = await axios.get("http://localhost/BatCave/backend/public/rooms")

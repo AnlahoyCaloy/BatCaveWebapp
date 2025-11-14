@@ -68,7 +68,7 @@ interface RoomCardProps {
       localStorage.getItem("reservationId") || null
     ))
 
-    const [reservationData, setReservationData] = useState<Reservations | null>(null);
+    const [reservationData, setReservationData] = useState(null);
 
     const [userData ,setUserData] = useState({});
 
@@ -127,16 +127,30 @@ interface RoomCardProps {
     }
   } 
 
+  useEffect(() => {
+    if (!userId) return; // don't fetch
+    const fetchUserReservation = async () => {
+      const response = await apiPost("/reservations-by-user", { userId });
+      console.log("fetch response:", response?.data);
+      setReservationData(response?.data);
+    };
+    fetchUserReservation();
+  }, [userId]);
   // if user doesnt have infor show this 
   if (!userId) {
     return <UserShow onSaveUser={onSaveUser} />;
   }
 
+    console.log(reservationData);
   
-  if (userId && reservationId) { 
+  
+  if (userId && reservationData) { 
     // fetch from database matching data of reservations and users
     const name = localStorage.getItem("userName")
     const phone = localStorage.getItem("userPhone")
+    console.log(reservationData);
+
+
     return (
       <div className="p-4 bg-gray-100 rounded shadow text-black">
         <h4 className="font-semibold">Welcome , {name}.You are already Reserved.</h4>
