@@ -191,6 +191,7 @@ interface RoomCardProps {
               <h3 className="text-lg font-semibold">{room.name}</h3>
               <p className="text-sm text-black-600">Capacity: {room.capacity} pax (max 20)</p>
               <div className='room-status text-black-600'>{room.reservation.length} reservations</div>
+              <div>Pax left 0/{room.capacity}</div>
             </div>
             <div>
               <button className="px-3 py-1 bg-blue-600 text-white rounded" onClick={() => setShowReservationForm(s => !s)}>
