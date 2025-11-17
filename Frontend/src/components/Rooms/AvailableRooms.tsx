@@ -31,6 +31,15 @@ export function withinOperatingHours(start: string, end: string, openTime: strin
   return startTime.isSameOrAfter(open) && endTime.isSameOrBefore(close);
 }
 
+/**
+ * Checks if the first date overlaps within the second date 
+ * @param {string} startA -> the start of the first date param 
+ * @param {string} endA -> the end of the first date
+ * @param {string} startB -> the start of the second date param 
+ * @param {string} endB -> the end of the second date
+ * @returns {boolean} checks if the first date is before the end of the second date and if the end of the first date is after the start of the second date. Basically , just checks if its inside. 
+ */
+
 export function reservationOverlap(startA: string, endA: string, startB: string, endB: string) {
   const aStart = dayjs(`2000-01-01T${startA}`);
   const aEnd = dayjs(`2000-01-01T${endA}`);
@@ -79,7 +88,6 @@ const AvailableRooms = () => {
 
   // this is what the user inputted
   function onReserve(roomId : string, r : Omit<Reservations , 'id'>) {
-    console.log(r)
     const currentRoom = room.find(room => roomId === room.id);
     // r is if the user inputted something r is the object and omit is remove the id 
     

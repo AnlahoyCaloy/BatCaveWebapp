@@ -65,9 +65,7 @@ interface RoomCardProps {
     const [userSaved , setUserSaved] = useState(false);
     const [userId, setUserId] = useState<string | null>(() => typeof window !== 'undefined' ? localStorage.getItem('userId') : null)
 
-    const [reservationId, setReservationId] = useState<string | null>(() => (
-      localStorage.getItem("reservationId") || null
-    ))
+    const [reservationId, setReservationId] = useState<string | null>(() => typeof window !== 'undefined' ? localStorage.getItem('userId') : null)
 
     const [reservationData, setReservationData] = useState<Reservations | null>(null);
 
@@ -95,6 +93,8 @@ interface RoomCardProps {
       }
     }, [userSaved, router])
 
+
+    // check if user data exists
     useEffect(() => {
       if(userData) {
         console.log(userData);
@@ -147,13 +147,14 @@ interface RoomCardProps {
     // fetch from database matching data of reservations and users
     const name = localStorage.getItem("userName")
     const phone = localStorage.getItem("userPhone")
-    
+    console.log(reservationData.date)
 
     return (
       <div className="p-4 bg-gray-100 rounded shadow text-black">
         <h4 className="font-semibold">Welcome , {name}.You are already Reserved.</h4>
         <p>Phone: {phone}</p>
         <p>Your Reservation id is {reservationId}</p>
+        <p>Start time of your reservation is {reservationData.start} to {reservationData.end}</p>
       </div>
     )
   } else {

@@ -50,7 +50,7 @@ class ReservationModel {
           WHERE r.user_id = :userId
       ");
       $stmt->execute([':userId' => $userId]);
-      return $stmt->fetchAll(PDO::FETCH_ASSOC);
+      return $stmt->fetchAll();
     }
 
     public function createReservation(array $data): array {
