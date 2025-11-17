@@ -1,9 +1,8 @@
 import React from 'react'
 import { motion } from 'framer-motion'
-import CardLayout from '../CardLayout'
 import { Reservations } from '../Rooms/RoomCard'
 import dayjs from 'dayjs'
-
+import CardLayout from './CardLayout'
 interface ConfirmationCardProps {
   reservationData : Reservations[] | null
 }

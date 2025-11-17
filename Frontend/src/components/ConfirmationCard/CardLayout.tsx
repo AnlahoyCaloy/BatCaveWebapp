@@ -25,7 +25,7 @@ const CardLayout: React.FC<CardLayout> = ({ children }) => {
 
   return (
     <motion.div
-    className='w-full h-full'
+    className='w-full h-full flex-col flex items-center'
     variants={cardAnimation}
     initial={"hidden"}
     animate={"animate"}>

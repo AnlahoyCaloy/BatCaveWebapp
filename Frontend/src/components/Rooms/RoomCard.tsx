@@ -171,7 +171,7 @@ interface RoomCardProps {
   // }
 
   return (
-    <div className='w-full max-w-[1100px]'>
+    <div className='w-full max-w-[1100px] flex flex-col justify-center items-center'>
       {currentReservation ? (
         <ConfirmationCard reservationData={[currentReservation]} />
       ) : (
