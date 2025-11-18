@@ -5,6 +5,8 @@ import UserShow from './UserShow'
 import { apiPost } from '@/src/api/axios'
 import { useRouter } from 'next/navigation'
 import ConfirmedReservation from '../ConfirmationCard/ConfirmedReservation'
+import { motion } from 'framer-motion'
+import dayjs from 'dayjs'
 
 export enum RoomType {
   Study = "Study",
@@ -45,6 +47,26 @@ interface RoomCardProps {
   onReserve: (roomId: string, r: Omit<Reservations, 'id'>) => Promise<{ success: boolean, message?: string, reservationId?: string, newReservation? : Reservations }>
 }
 
+const enum PricePerPax {
+  Study = 50,
+  Function = 1000
+}
+
+// Helper function to calculate hours between two time strings
+const calculateHours = (startTime: string, endTime: string): number => {
+  const start = dayjs(`2024-01-01T${startTime}`)
+  const end = dayjs(`2024-01-01T${endTime}`)
+  
+  // If end time is before start time assume next day
+  let endTime_ = end
+  if (end.isBefore(start)) {
+    endTime_ = end.add(1, 'day')
+  }
+  
+  const hours = endTime_.diff(start, 'hour', true)
+  return Math.max(1, Math.ceil(hours))
+}
+
 const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
   const [showReservationForm, setShowReservationForm] = useState(false)
   const [date, setDate] = useState('')
@@ -57,8 +79,14 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
   const [userId, setUserId] = useState<string | null>(null)
   const [reservationId, setReservationId] = useState<string | null>(null)
   const [reservationData, setReservationData] = useState<Reservations[] | null>(null)
-  const [userData, setUserData] = useState({})
   const router = useRouter()
+
+  // Calculate price in real-time
+  const currentPrice = useMemo(() => { // useMemo to save compute
+    const pricePerHour = type === RoomType.Study ? PricePerPax.Study : PricePerPax.Function
+    const hoursCount = start && end ? calculateHours(start, end) : 1
+    return pricePerHour * pax * hoursCount
+  }, [pax, type, start, end])
 
   // Load localStorage only on client using useEffect
   useEffect(() => {
@@ -69,8 +97,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
   }, [])
 
   async function onSaveUser(userId: string, name: string, phone: string, reservationId: string | null) {
-    const response = await apiPost("/users", { userId, name, phone });
-    setUserData(response?.data)
+    await apiPost("/users", { userId, name, phone })
     setUserId(userId)
     setReservationId(reservationId)
     setUserSaved(true)
@@ -87,7 +114,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
     if (!userId) return;
     const fetchUserReservation = async () => {
       const response = await apiPost("/reservations-by-user", { userId });
-      const formatted = response?.data.map((r: any) => ({
+      const formatted = response?.data.map((r: Record<string, string | number>) => ({
         id: r.id,
         userId: r.user_id,
         date: r.date,
@@ -140,7 +167,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
         await apiPost('/reservations' , res.newReservation)
       }
 
-      setFeedback('Reserved successfully')
+      setFeedback('Reserved successfully');
       setShowReservationForm(false)
     }
   }
@@ -176,78 +203,150 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
           </div>
 
           {showReservationForm && (
-            <form onSubmit={handleSubmit} className="mt-4 space-y-3">
-              <div>
-                <label className="text-sm">Date</label>
-                <input
-                  aria-label="reservation-date"
-                  className="block w-full mt-1 p-2 border rounded bg-white text-black"
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                />
-              </div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ type : "spring", stiffness : 300, damping : 25 }}
+              className="fixed inset-0 z-2 flex items-center justify-center"
+            >
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                <div>
-                  <label className="text-sm">Start</label>
-                  <input
-                    aria-label="reservation-start"
-                    className="block w-full mt-1 p-2 border rounded bg-white text-black"
-                    type="time"
-                    value={start}
-                    onChange={(e) => setStart(e.target.value)}
-                  />
-                </div>
-                <div>
-                  <label className="text-sm">End</label>
-                  <input
-                    aria-label="reservation-end"
-                    className="block w-full mt-1 p-2 border rounded bg-white text-black"
-                    type="time"
-                    value={end}
-                    onChange={(e) => setEnd(e.target.value)}
-                  />
-                </div>
-              </div>
+              <div
+                className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+                onClick={() => setShowReservationForm(false)}
+              />
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 items-end">
+              <motion.form
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ opacity : 0, scale : 0.9 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+                onSubmit={handleSubmit}
+                onClick={(e) => e.stopPropagation()}
+                className="relative w-full max-w-xl mx-4 p-6 bg-[var(--color-coffee-medium)] rounded-xl border-4 border-amber-600 shadow-2xl space-y-4"
+              >
+                {/* Close button */}
+                <button
+                  type="button"
+                  onClick={() => setShowReservationForm(false)}
+                  className="absolute top-3 right-3 text-amber-50 bg-amber-700/30 hover:bg-amber-700/50 rounded-full p-2"
+                  aria-label="Close reservation form"
+                >
+                  ✕
+                </button>
+
+                <div className="flex items-center gap-2 mb-4">
+                  <h4 className="text-xl font-bold text-amber-100">Reserve Your Perfect Brew Moment</h4>
+                </div>
+
+                <div className="h-1 bg-linear-to-r from-amber-600 to-yellow-600 rounded-full"></div>
+
                 <div>
-                  <label className="text-sm">Pax</label>
+                  <label className="block text-sm font-bold text-amber-100 mb-2 tracking-wide">📅 Date</label>
                   <input
-                    aria-label="reservation-pax"
-                    className="block w-full mt-1 p-2 border rounded bg-white text-black"
-                    type="number"
-                    min={1}
-                    max={20}
-                    value={pax}
-                    onChange={(e) => setPax(Number(e.target.value))}
+                    aria-label="reservation-date"
+                    className="block w-full px-4 py-3 border-2 border-amber-600 rounded-lg bg-amber-50 text-amber-900 placeholder-amber-700 focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-300 transition font-semibold"
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    required
                   />
                 </div>
-                <div>
-                  <label className="text-sm">Type</label>
-                  <select
-                    aria-label="reservation-type"
-                    className='block w-full mt-1 p-2 border rounded bg-white text-black'
-                    id='reserve-type'
-                    name='reserveType'
-                    value={type}
-                    onChange={(e) => setType(e.target.value as RoomType)}
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-bold text-amber-100 mb-2 tracking-wide">⏰ Start Time</label>
+                    <input
+                      aria-label="reservation-start"
+                      className="block w-full px-4 py-3 border-2 border-amber-600 rounded-lg bg-amber-50 text-amber-900 focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-300 transition font-semibold"
+                      type="time"
+                      value={start}
+                      onChange={(e) => setStart(e.target.value)}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-amber-100 mb-2 tracking-wide">🕐 End Time</label>
+                    <input
+                      aria-label="reservation-end"
+                      className="block w-full px-4 py-3 border-2 border-amber-600 rounded-lg bg-amber-50 text-amber-900 focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-300 transition font-semibold"
+                      type="time"
+                      value={end}
+                      onChange={(e) => setEnd(e.target.value)}
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-end">
+                  <div>
+                    <label className="block text-sm font-bold text-amber-100 mb-2 tracking-wide">👥 Number of People</label>
+                    <input
+                      aria-label="reservation-pax"
+                      className="block w-full px-4 py-3 border-2 border-amber-600 rounded-lg bg-amber-50 text-amber-900 focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-300 transition font-semibold"
+                      type="number"
+                      min={1}
+                      max={20}
+                      value={pax}
+                      onChange={(e) => setPax(Number(e.target.value))}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-bold text-amber-100 mb-2 tracking-wide">🏷️ Reservation Type</label>
+                    <select
+                      aria-label="reservation-type"
+                      className='block w-full px-4 py-3 border-2 border-amber-600 rounded-lg bg-amber-50 text-amber-900 focus:outline-none focus:border-yellow-400 focus:ring-2 focus:ring-yellow-300 transition font-semibold'
+                      id='reserve-type'
+                      name='reserveType'
+                      value={type}
+                      onChange={(e) => setType(e.target.value as RoomType)}
+                      required
+                    >
+                      <option value={RoomType.Study}>📚 Study</option>
+                      <option value={RoomType.Function}>🎉 Function</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div className=" border-2 border-amber-400 rounded-lg p-4 text-center">
+                  <p className="text-sm text-amber-100 font-semibold mb-1">Estimated Total Price</p>
+                  <p className="text-3xl font-bold text-yellow-300">₱{currentPrice.toLocaleString()}</p>
+                  <p className="text-xs text-amber-100 mt-1">({type === RoomType.Study ? '₱50' : '₱1000'}/hour per person)</p>
+                </div>
+
+                <div className="h-1 bg-linear-to-r from-amber-600 to-yellow-600 rounded-full mt-6"></div>
+
+                <div className="flex gap-3 pt-4">
+                  <button
+                    className="flex-1 px-4 py-3 bg-linear-to-r from-amber-600 to-yellow-600 text-white font-bold rounded-lg hover:from-amber-700 hover:to-yellow-700 shadow-lg transform transition hover:scale-105 active:scale-95 text-base tracking-wide"
+                    type="submit"
                   >
-                    <option value={RoomType.Study}>Study</option>
-                    <option value={RoomType.Function}>Function</option>
-                  </select>
+                    ✓ Brew It!
+                  </button>
+                  <button
+                    type="button"
+                    className="flex-1 px-4 py-3 bg-amber-700 text-amber-100 font-bold rounded-lg hover:bg-amber-800 shadow-lg transform transition hover:scale-105 active:scale-95 text-base tracking-wide"
+                    onClick={() => setShowReservationForm(false)}
+                  >
+                    ✕ Cancel
+                  </button>
                 </div>
-              </div>
 
-              <div className="flex gap-2 mt-2">
-                <button className="px-4 py-2 bg-green-600 text-white rounded" type="submit">Confirm</button>
-                <button type="button" className="px-4 py-2 bg-gray-200 rounded" onClick={() => setShowReservationForm(false)}>Close</button>
-              </div>
-            </form>
+              {feedback && (
+                <div className={`mt-4 p-4 rounded-lg border-l-4 font-semibold ${feedback.includes('successfully') ? 'bg-green-100 border-green-600 text-green-800' : 'bg-red-100 border-red-600 text-red-800'}`}>
+                  <p className="text-sm">{feedback}</p>
+                </div>
+              )}
+              </motion.form>
+            </motion.div>
           )}
 
-          {feedback && <p className="mt-2 text-sm text-red-600">{feedback}</p>}
+          {feedback && (
+            <div className={`mt-4 p-4 rounded-lg border-l-4 font-semibold ${feedback.includes('successfully') ? 'bg-green-100 border-green-600 text-green-800' : 'bg-red-100 border-red-600 text-red-800'}`}>
+              <p className="text-sm">{feedback}</p>
+            </div>
+          )}
         </div>
       )}
     </div>

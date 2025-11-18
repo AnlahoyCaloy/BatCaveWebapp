@@ -25,7 +25,8 @@ const ConfirmedReservation: React.FC<ConfirmedReservationProps> = ({ reservation
             const exactDateStart = dayjs(`${date}T${start}`).format('h:mm')
             const exactDateEnd = dayjs(`${date}T${end}`).format('h:mm')
             const trimmedRoom = roomId.split('"');
-  
+            
+            
             return(
               (
               <div key={i} className="p-6 rounded-lg shadow-lg flex flex-col gap-4 max-w-[800px] w-full" style={{ backgroundColor: "var(--color-coffee-dark)", borderLeft: "4px solid #D4A574" }}>

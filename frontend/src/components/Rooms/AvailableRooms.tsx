@@ -118,7 +118,7 @@ const AvailableRooms = () => {
     if(r.type === RoomType.Study) {
       const overlappingfunction = overlapping.filter(o => o.type === RoomType.Function) 
       if (overlappingfunction.length > 0 ) return {success : false , message : "Can't reserve during a function"}
-
+      
       const overlappingStudy = currentRoom.reservation.filter(
         o => o.type === RoomType.Study && reservationOverlap(o.start , o.end , r.start, r.end) && o.date === r.date
       ) // o is each of the study times that will overlap the input user

@@ -20,7 +20,7 @@ import { Variants } from "motion";
   
   const animationVariant2 : Variants = {
     hidden : {
-      scale : 0.4, opacity : 0
+      scale : 0.9, opacity : 0
     },
     scrollView : {
       scale : 1 , opacity : 1,
@@ -39,8 +39,6 @@ export default function Home() {
             fontFamily : 'var(--font-Cinzel)',
             fontSize : '35px'
           }}>Explore Drinks</h1>
-      
-
         <CarouselContainer />
       </Section>
 
