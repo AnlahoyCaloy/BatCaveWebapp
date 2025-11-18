@@ -1,9 +1,8 @@
 "use client"
-import React, { useEffect } from 'react'
+import React from 'react'
 import '../../app/globals.css'
 import { useState } from 'react'
-import '../../app/globals.css'
-import {motion} from 'framer-motion'
+import { motion } from 'framer-motion'
 
 interface UserShowProps {
   onSaveUser : (userId : string , name : string, phone : string, reservationId : string | null) => void
@@ -22,14 +21,16 @@ const UserShow : React.FC<UserShowProps> = ({ onSaveUser }) => {
   const [phone, setPhone] = useState(() =>
       typeof window !== "undefined" ? localStorage.getItem("userPhone") || '' : ''
   );
-  const [message , setMessage] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   const [reservationid, setReservationId] = useState<string | null>(() => 
     typeof window !== "undefined" ? localStorage.getItem("reservationId") : null
-);
+  );
   
+  // Validate phone: require exact 11 digits starting with '09' (e.g. 09812238146)
   const validatePhone = (phone: string) => {
-    // Allow various phone formats: 10-15 digits, with optional spaces, hyphens, or parentheses
-    return /^[\d\s\-\(\)]{10,15}$/.test(phone.replace(/\D/g, '').trim()) && /\d/.test(phone)
+    const cleaned = phone.trim()
+    const re = /^09\d{9}$/
+    return re.test(cleaned)
   }
   
   const handleSave = (e: React.FormEvent) => {
@@ -39,8 +40,8 @@ const UserShow : React.FC<UserShowProps> = ({ onSaveUser }) => {
       return
     }
 
-    if(!validatePhone(phone)) {
-      setMessage("Phone number must be at least 10 digits")
+    if (!validatePhone(phone)) {
+      setMessage("Phone number must be exactly 11 digits and start with '09' (e.g. 09812238146)")
       return
     }
 
@@ -78,6 +79,7 @@ const UserShow : React.FC<UserShowProps> = ({ onSaveUser }) => {
           type="tel"
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
+          placeholder="09812238146"
           className="block w-full p-2 border rounded"
         />
       </div>
@@ -89,6 +91,5 @@ const UserShow : React.FC<UserShowProps> = ({ onSaveUser }) => {
     </form>
   )
 }
-
 
 export default UserShow

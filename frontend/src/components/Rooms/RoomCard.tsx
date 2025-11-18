@@ -5,7 +5,7 @@ import UserShow from './UserShow'
 import { apiPost } from '@/src/api/axios'
 import { useRouter } from 'next/navigation'
 import ConfirmedReservation from '../ConfirmationCard/ConfirmedReservation'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import dayjs from 'dayjs'
 
 export enum RoomType {
@@ -44,7 +44,7 @@ export interface Reservations {
 
 interface RoomCardProps {
   room: Room,
-  onReserve: (roomId: string, r: Omit<Reservations, 'id'>) => Promise<{ success: boolean, message?: string, reservationId?: string, newReservation? : Reservations }>
+  onReserve: (roomId: string, r: Omit<Reservations, 'id'>) => Promise<{ success: boolean, message?: string, reservationId?: string, newReservation? : Reservations, totalPax? : number }>
 }
 
 const enum PricePerPax {
@@ -79,14 +79,20 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
   const [userId, setUserId] = useState<string | null>(null)
   const [reservationId, setReservationId] = useState<string | null>(null)
   const [reservationData, setReservationData] = useState<Reservations[] | null>(null)
+  const [paxLeft, setPaxLeft] = useState<number>();
   const router = useRouter()
 
   // Calculate price in real-time
-  const currentPrice = useMemo(() => { // useMemo to save compute
+  const currentPrice = useMemo(() => { // useMemo to save compute and render automatically
     const pricePerHour = type === RoomType.Study ? PricePerPax.Study : PricePerPax.Function
-    const hoursCount = start && end ? calculateHours(start, end) : 1
+    const hoursCount = start && end ? calculateHours(start, end) : 1 // if start and end true then get the difference of the start and end hours then multiply the pax priceperhour and
     return pricePerHour * pax * hoursCount
   }, [pax, type, start, end])
+
+  // FETCH ALL RESERVATIONS
+  // const activeReservations = room.reservation.filter(
+  //   r => r.status === ReservationStatus.Pending || r.status === ReservationStatus.Ongoing
+  // );
 
   // Load localStorage only on client using useEffect
   useEffect(() => {
@@ -96,6 +102,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
     if (storedReservationId) setReservationId(storedReservationId)
   }, [])
 
+  // SAVE THE USER
   async function onSaveUser(userId: string, name: string, phone: string, reservationId: string | null) {
     await apiPost("/users", { userId, name, phone })
     setUserId(userId)
@@ -108,8 +115,8 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
       router.push('/rooms')
     }
   }, [userSaved, router])
-
-  // Fetch reservations for this user
+ 
+  // FETCH RESERVATIONS FOR THIS USER
   useEffect(() => {
     if (!userId) return;
     const fetchUserReservation = async () => {
@@ -132,6 +139,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
     fetchUserReservation()
   }, [userId])
 
+  // GET CURRENT RESERVATION
   const currentReservation = useMemo(() => {
     if (!reservationData || !reservationId) return null
     return reservationData.find((r) => r.id === reservationId)
@@ -143,6 +151,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
   // If reservation data is loading, show placeholder
   if (reservationData === null) return <div>Loading reservations...</div>
 
+  // INSERT RESERVATIONS
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (!date) {
@@ -153,7 +162,6 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
       setFeedback('Please enter your details first.')
       return
     }
-
     const res = await onReserve(room.id, { date, start, end, pax, type, status: ReservationStatus.Pending, userId, roomId: room.id })
     if (!res.success) {
       setFeedback(res.message || 'Could not reserve')
@@ -166,11 +174,12 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
       if(res.newReservation) {
         await apiPost('/reservations' , res.newReservation)
       }
-
+      setPaxLeft(res.totalPax);
       setFeedback('Reserved successfully');
       setShowReservationForm(false)
     }
   }
+
 
   return (
     <div className='w-full max-w-[1100px] flex flex-col justify-center items-center'>
@@ -193,7 +202,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
               <h3 className="text-lg font-semibold">{room.name}</h3>
               <p className="text-sm text-black-600">Capacity: {room.capacity} pax (max 20)</p>
               <div className='room-status text-black-600'>{room.reservation.length} reservations</div>
-              <div>Pax left 0/{room.capacity}</div>
+              <div>Pax left {paxLeft}/{room.capacity}</div>
             </div>
             <div>
               <button className="px-3 py-1 bg-blue-600 text-white rounded" onClick={() => setShowReservationForm(s => !s)}>
@@ -202,6 +211,8 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
             </div>
           </div>
 
+
+        <AnimatePresence>
           {showReservationForm && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -209,10 +220,15 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
               exit={{ opacity: 0 }}
               transition={{ type : "spring", stiffness : 300, damping : 25 }}
               className="fixed inset-0 z-2 flex items-center justify-center"
+              style={{  }}
             >
 
-              <div
-                className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+              <motion.div
+              initial={{ opacity : 0 , backdropFilter : "blur(0px)" }}
+              animate={{ opacity : 1, backdropFilter : "blur(20px)" }}
+              exit={{ opacity : 0, backdropFilter : "blur(0px)"}}
+              transition={{ duration : 1 , ease : "easeInOut"}}
+                className="absolute inset-0 bg-black/50"
                 onClick={() => setShowReservationForm(false)}
               />
 
@@ -341,7 +357,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
               </motion.form>
             </motion.div>
           )}
-
+        </AnimatePresence>
           {feedback && (
             <div className={`mt-4 p-4 rounded-lg border-l-4 font-semibold ${feedback.includes('successfully') ? 'bg-green-100 border-green-600 text-green-800' : 'bg-red-100 border-red-600 text-red-800'}`}>
               <p className="text-sm">{feedback}</p>
