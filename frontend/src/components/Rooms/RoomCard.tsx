@@ -79,7 +79,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
   const [userId, setUserId] = useState<string | null>(null)
   const [reservationId, setReservationId] = useState<string | null>(null)
   const [reservationData, setReservationData] = useState<Reservations[] | null>(null)
-  const [paxLeft, setPaxLeft] = useState<number>();
+  const [paxLeft, setPaxLeft] = useState<number>(0);
   const router = useRouter()
 
   // Calculate price in real-time
@@ -88,6 +88,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
     const hoursCount = start && end ? calculateHours(start, end) : 1 // if start and end true then get the difference of the start and end hours then multiply the pax priceperhour and
     return pricePerHour * pax * hoursCount
   }, [pax, type, start, end])
+
 
   // FETCH ALL RESERVATIONS
   // const activeReservations = room.reservation.filter(

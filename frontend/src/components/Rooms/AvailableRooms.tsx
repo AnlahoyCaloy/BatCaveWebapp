@@ -28,7 +28,8 @@ export function withinOperatingHours(start: string, end: string, openTime: strin
   const endTime = dayjs(`2000-01-01T${end}`);
   const open = dayjs(`2000-01-01T${openTime}`);
   const close = dayjs(`2000-01-01T${closeTime}`);
-
+  if (endTime <= startTime) return false;
+ 
   return startTime.isSameOrAfter(open) && endTime.isSameOrBefore(close);
 }
 
