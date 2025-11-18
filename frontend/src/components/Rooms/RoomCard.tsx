@@ -325,7 +325,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
                   </div>
                 </div>
 
-                <div className=" border-2 border-amber-400 rounded-lg p-4 text-center">
+                <div className=" border-2 border-amber-400 bg-amber-400/10 rounded-lg p-4 text-center">
                   <p className="text-sm text-amber-100 font-semibold mb-1">Estimated Total Price</p>
                   <p className="text-3xl font-bold text-yellow-300">₱{currentPrice.toLocaleString()}</p>
                   <p className="text-xs text-amber-100 mt-1">({type === RoomType.Study ? '₱50' : '₱1000'}/hour per person)</p>
