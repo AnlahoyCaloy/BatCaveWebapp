@@ -5,6 +5,8 @@ import NavBar from "../components/Navigation/NavBar";
 import localFont from 'next/font/local';
 import Footer from "../components/Footer/Footer";
 import Wave from 'react-wavify'
+import { Variants } from "motion";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -35,6 +37,27 @@ const Cinzel = localFont({
   variable : '--font-Cinzel'
 })
 
+  //  animation variants
+ const animationVariant : Variants = {
+    hidden : {
+      y : -200, opacity : 0
+    },
+    scrollView : {
+      y : 0, opacity : 1,
+      transition : { duration : 0.8 , ease : "easeInOut" }
+    }
+  }
+  
+  const animationVariant2 : Variants = {
+    hidden : {
+      scale : 0.4, opacity : 0
+    },
+    scrollView : {
+      scale : 1 , opacity : 1,
+      transition : { type : "spring" , stiffness : 120, damping : 20 }
+    }
+  }
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -64,17 +87,6 @@ export default function RootLayout({
         }}
       />
 
-      {/* Video */}
-      {/* <video 
-        className="absolute top-0 left-0 w-full h-[1400px] object-cover -z-10" 
-        src="/videos/backgroundVideo.mp4" 
-        autoPlay 
-        loop 
-        muted
-        style={{
-          filter: "blur(8px)"
-        }}
-      /> */}
         {children}
       <Footer />
       </body>

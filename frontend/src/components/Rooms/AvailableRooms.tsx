@@ -54,41 +54,42 @@ export function reservationOverlap(startA: string, endA: string, startB: string,
 const initialDummyRoomsFromDatabase : Room[] = [
   {id : "ROOM1" , name : "Study Room" , capacity : 20, reservation : []}
 ]
-
+  
 const AvailableRooms = () => {
-  const [timeNow , setTimeNow] = useState(dayjs().format("DD:MM:HH:mm:ss"))
-
+  const [timeNow , setTimeNow] = useState(dayjs().format("DD:MM:HH:mm:ss"));
   const [room , setRoom] = useState(initialDummyRoomsFromDatabase);
-  const [reservations , setReservations] = useState(room[0].reservation)
+  const [reservations , setReservations] = useState(room[0].reservation);  
 
-  const fetchRoomData = async () => {
+  useEffect(() => {
+    // getting data from database now.
+    const fetchRoomData = async () => {
       const roomResponse = await axios.get("http://localhost/batcave/backend/public/rooms")
       const reservationResponse = await axios.get("http://localhost/batcave/backend/public/reservations");
 
       const roomsWithReservations = roomResponse.data.map((room : Room) => ({
         ...room,
-        reservation : reservationResponse.data.filter((r : Reservations) => r.id === room.id)
+        reservation : reservationResponse.data.filter((r : Reservations) => r.roomId === room.id)
       }));
-
+      
+      console.log(roomsWithReservations);
       setRoom(roomsWithReservations)
     }
 
-  useEffect(() => {
-    // getting data from database now.
+
     fetchRoomData();
   }, [])
 
-  useEffect(() => {
-    reservations.map(r => {
-      if(r) {
-        console.log("reservation created at " + r.date)
-        console.log(r)
-      }
-    })
-  })
+  // useEffect(() => {
+  //   reservations.map(r => {
+  //     if(r) {
+  //       console.log("reservation created at " + r.date)
+  //       console.log(r)
+  //     }
+  //   })
+  // })
 
   // this is what the user inputted
-  function onReserve(roomId : string, r : Omit<Reservations , 'id'>) {
+  async function onReserve(roomId : string, r : Omit<Reservations , 'id'>) {
     const currentRoom = room.find(room => roomId === room.id);
     // r is if the user inputted something r is the object and omit is remove the id 
     
@@ -129,26 +130,18 @@ const AvailableRooms = () => {
       // .reduce((sum , current) => sum + current.pax , 0) + r.pax
       // sum up all the reservations overlapping with type study and add the input pax
       if(totalPax + r.pax > currentRoom.capacity) {
-        return { success : false  , message : "Pax exceed maximum limit / change the pax "}
+        return { success : false  , message : `Pax exceed maximum limit / change the pax ${totalPax + r.pax} which is beyond the limit`}
       }
+
       const totalPaxAfterReservation = totalPax + r.pax;
       console.log("Total Pax after reservation: " + totalPaxAfterReservation);
       
     } 
     // if no problems, create new reservation
     const newReservation = {id : `R#${Date.now() * 100}`, ...r}
-    // send it to the database
-    const sendNewReservation = async () => {
-      const res = apiPost("/reservations", newReservation);
-      
-      console.log(res);
-      fetchRoomData();
-    }
-    
-    sendNewReservation();
 
+    // frontend data
     setReservations([...currentRoom.reservation , newReservation])
-    
     setRoom(prev => // get the roooms
       prev.map(room => { // loop through the rooms 
         if(room.id === roomId) { // if the id of one of the rooms is the same as the one we inputted which is the what we loop through in the return of this whole component
@@ -163,7 +156,7 @@ const AvailableRooms = () => {
 
     // if successful return the reservation ID
     // object that we will send to the user
-    return { success : true, message : "Reserved Successfully", reservationId : newReservation.id}
+    return { success : true, message : "Reserved Successfully", reservationId : newReservation.id, newReservation : newReservation}
      // and a popup or something
   }
 

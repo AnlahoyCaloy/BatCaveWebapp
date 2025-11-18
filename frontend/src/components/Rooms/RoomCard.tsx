@@ -2,28 +2,23 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 import UserShow from './UserShow'
-import axios from 'axios'
 import { apiPost } from '@/src/api/axios'
 import { useRouter } from 'next/navigation'
-import dayjs from 'dayjs'
-import CardLayout from '../CardLayout'
-import ConfirmationCard from '../ConfirmationCard/ConfirmationCard'
+import ConfirmedReservation from '../ConfirmationCard/ConfirmedReservation'
 
-// WILL ANALYZE THIS MORE IN THE FUTURE 
-// WILL USE CONTEXT FOR BETTER STATE MANAGEMENT AND FOR REAL AUTHORIZATION
 export enum RoomType {
-  Study = "Study" ,
+  Study = "Study",
   Function = "Function"
 }
 
-export interface Room { // get from database
-  id : string,
-  name : string,
-  capacity : number,
-  reservation : Reservations[],
+export interface Room {
+  id: string,
+  name: string,
+  capacity: number,
+  reservation: Reservations[],
 }
 
-enum ReservationStatus {
+export enum ReservationStatus {
   Pending = "Pending",
   Ongoing = "Ongoing",
   Completed = "Completed",
@@ -32,150 +27,128 @@ enum ReservationStatus {
 }
 
 export interface Reservations {
-  id : string,
-  userId : string, // foreign key to the users table
-  date : string,
-  start : string,
-  end : string,
-  pax : number,
-  type : RoomType,
-  status : ReservationStatus,
-  roomId : string,
-  phone? : string,
-  userName? : string
-}
-
-export interface User {
-  userId : string,
-  name : string,
-  phone : string,
+  id: string,
+  userId: string,
+  date: string,
+  start: string,
+  end: string,
+  pax: number,
+  type: RoomType,
+  status: ReservationStatus,
+  roomId: string,
+  phone?: string,
+  userName?: string
 }
 
 interface RoomCardProps {
-  room : Room,
-  onReserve : (roomId : string , r : Omit<Reservations, 'id'>) => { success : boolean , message? : string, reservationId? : string }
+  room: Room,
+  onReserve: (roomId: string, r: Omit<Reservations, 'id'>) => Promise<{ success: boolean, message?: string, reservationId?: string, newReservation? : Reservations }>
 }
 
-  const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
-    const [showReservationForm, setShowReservationForm] = useState(false)
-    const [date, setDate] = useState('')
-    const [start, setStart] = useState('13:00')
-    const [end, setEnd] = useState('22:00')
-    const [pax, setPax] = useState<number>(1)
-    const [feedback, setFeedback] = useState<string | null>(null)
-    const [type, setType] = useState<RoomType>(RoomType.Study)
-    const [price, setPrice] = useState<number>(0);
-    const router = useRouter();
-    const [userSaved , setUserSaved] = useState(false);
-    const [userId, setUserId] = useState<string | null>(() => typeof window !== 'undefined' ? localStorage.getItem('userId') : null)
+const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
+  const [showReservationForm, setShowReservationForm] = useState(false)
+  const [date, setDate] = useState('')
+  const [start, setStart] = useState('13:00')
+  const [end, setEnd] = useState('22:00')
+  const [pax, setPax] = useState<number>(1)
+  const [feedback, setFeedback] = useState<string | null>(null)
+  const [type, setType] = useState<RoomType>(RoomType.Study)
+  const [userSaved, setUserSaved] = useState(false)
+  const [userId, setUserId] = useState<string | null>(null)
+  const [reservationId, setReservationId] = useState<string | null>(null)
+  const [reservationData, setReservationData] = useState<Reservations[] | null>(null)
+  const [userData, setUserData] = useState({})
+  const router = useRouter()
 
-    const [reservationId, setReservationId] = useState<string | null>(() => typeof window !== 'undefined' ? localStorage.getItem('reservationId') : null)
+  // Load localStorage only on client using useEffect
+  useEffect(() => {
+    const storedUserId = localStorage.getItem('userId')
+    const storedReservationId = localStorage.getItem('reservationId')
+    if (storedUserId) setUserId(storedUserId)
+    if (storedReservationId) setReservationId(storedReservationId)
+  }, [])
 
-    const [reservationData, setReservationData] = useState<Reservations[] | null>(null);
-
-    const [userData ,setUserData] = useState({});
-
-    async function onSaveUser(userId : string , name : string, phone : string, reservationId : string | null) {
-      const response = await apiPost("/users", { userId , name , phone });
-      setUserData(response?.data);
-      setUserId(userId);
-      setReservationId(reservationId);
-      setUserSaved(true);
-    }
-
-    useEffect(() => {
-      if(userSaved) {
-        router.push('/rooms')
-      }
-    }, [userSaved, router])
-
-
-    // check if user data exists
-    useEffect(() => {
-      if(userData) {
-        console.log(userData);
-      } else {
-        console.log("User data not found");
-      }
-    }, [userData])
-
-    async function handleSubmit(e: React.FormEvent) {
-        e.preventDefault()
-        if (!date) {
-          setFeedback('Please select a date')
-          return
-        }
-        if (!userId) {
-          setFeedback('Please enter your details first.')
-          return
-        }
-
-      const res = onReserve(room.id, { date, start, end, pax , type, status : ReservationStatus.Pending, userId, roomId : room.id})
-      if (!res.success) {
-        setFeedback(res.message || 'Could not reserve')
-        setShowReservationForm(true);
-      } else {
-        console.log(pax);
-        if (res.reservationId) {
-          localStorage.setItem('reservationId', res.reservationId)
-          setReservationId(res.reservationId)
-        }
-        setFeedback('Reserved successfully')
-        setShowReservationForm(false);
-      }
-    } 
+  async function onSaveUser(userId: string, name: string, phone: string, reservationId: string | null) {
+    const response = await apiPost("/users", { userId, name, phone });
+    setUserData(response?.data)
+    setUserId(userId)
+    setReservationId(reservationId)
+    setUserSaved(true)
+  }
 
   useEffect(() => {
-    if (!userId) return; // don't fetch
-    const fetchUserReservation = async () => {
-      const response = await apiPost("/reservations-by-user", { userId }); // ;ost the userId to find the reservation
-      console.log("fetch response:", response?.data);
-      
-      const formatted = response?.data.map((r : any) => ({
-        id : r.id,
-        userId : r.user_id,
-        date : r.date,
-        start : r.start,
-        end : r.end,
-        pax : r.pax,
-        type : r.type,
-        status : r.status,
-        roomId : r.room_id,
-        phone : r.phone,
-        userName : r.user_name,
-      })) 
+    if (userSaved) {
+      router.push('/rooms')
+    }
+  }, [userSaved, router])
 
-      setReservationData(formatted);
-    };
-    fetchUserReservation();
-  }, [userId]);
+  // Fetch reservations for this user
+  useEffect(() => {
+    if (!userId) return;
+    const fetchUserReservation = async () => {
+      const response = await apiPost("/reservations-by-user", { userId });
+      const formatted = response?.data.map((r: any) => ({
+        id: r.id,
+        userId: r.user_id,
+        date: r.date,
+        start: r.start,
+        end: r.end,
+        pax: r.pax,
+        type: r.type,
+        status: r.status,
+        roomId: r.room_id,
+        phone: r.phone,
+        userName: r.user_name,
+      }))
+      setReservationData(formatted)
+    }
+    fetchUserReservation()
+  }, [userId])
 
   const currentReservation = useMemo(() => {
-    if(!reservationData || !reservationId) return null;
-
-
-    return reservationData.find((r) => r.id === reservationId);
+    if (!reservationData || !reservationId) return null
+    return reservationData.find((r) => r.id === reservationId)
   }, [reservationData, reservationId])
 
-  // if user doesnt have information show this 
-  if (!userId) {
-    return <UserShow onSaveUser={onSaveUser} />;
-  }  
-  
-  // if (userId && reservationData && reservationId) { 
-  //   // fetch from database matching data of reservations and users
-  //   console.log(reservationData)
-  // } else {
-  //   console.log("Not in ")
-  // }
-  // if (!reservationData) {
-  //   return <div>Loading...</div>;
-  // }
+  // If userId not loaded yet, show UserShow
+  if (userId === null) return <UserShow onSaveUser={onSaveUser} />
+
+  // If reservation data is loading, show placeholder
+  if (reservationData === null) return <div>Loading reservations...</div>
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!date) {
+      setFeedback('Please select a date')
+      return
+    }
+    if (!userId) {
+      setFeedback('Please enter your details first.')
+      return
+    }
+
+    const res = await onReserve(room.id, { date, start, end, pax, type, status: ReservationStatus.Pending, userId, roomId: room.id })
+    if (!res.success) {
+      setFeedback(res.message || 'Could not reserve')
+      setShowReservationForm(true)
+    } else {
+      if (res.reservationId) {
+        localStorage.setItem('reservationId', res.reservationId)
+        setReservationId(res.reservationId)
+      }
+      if(res.newReservation) {
+        await apiPost('/reservations' , res.newReservation)
+      }
+
+      setFeedback('Reserved successfully')
+      setShowReservationForm(false)
+    }
+  }
 
   return (
     <div className='w-full max-w-[1100px] flex flex-col justify-center items-center'>
       {currentReservation ? (
-        <ConfirmationCard reservationData={[currentReservation]} />
+        <ConfirmedReservation reservationData={[currentReservation]} />
       ) : (
         <div className="room-card w-full p-4 text-black rounded-md shadow-md" style={{ borderRadius: 12, backgroundColor: "var(--color-coffee-dark)", boxShadow: "var(--shadow-custom)" }}>
           <div className="w-full h-[500px] relative rounded overflow-hidden mb-4" style={{ borderRadius: 8 }}>
@@ -187,7 +160,7 @@ interface RoomCardProps {
               style={{ objectFit: 'cover' }}
             />
           </div>
-        
+
           <div className="flex justify-between items-center">
             <div>
               <h3 className="text-lg font-semibold">{room.name}</h3>
@@ -201,7 +174,6 @@ interface RoomCardProps {
               </button>
             </div>
           </div>
-
 
           {showReservationForm && (
             <form onSubmit={handleSubmit} className="mt-4 space-y-3">

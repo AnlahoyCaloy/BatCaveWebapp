@@ -6,7 +6,7 @@ class Database {
 
   private \PDO $pdo;
   // directoy for linux - sqlite:/opt/lampp/htdocs/batcave/Batcave/Backend/src/mydatabase.db
-  public function __construct(private string $path = __DIR__ .  '/../database/batcave.db'){
+  public function __construct(private string $path = __DIR__ . '/../database/batcave.db'){
     $this->connect();
   }
 

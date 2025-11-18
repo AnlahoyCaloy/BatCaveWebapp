@@ -11,12 +11,22 @@ interface UserShowProps {
 
 const UserShow : React.FC<UserShowProps> = ({ onSaveUser }) => {
 
-  const [userId , setUserId] = useState<string | null>(() => typeof window !== undefined ? localStorage.getItem("userId") : null);
-  const [name , setName] = useState(() => localStorage.getItem("userName") || '');
-  const [phone , setPhone] = useState(() => localStorage.getItem("userPhone") || '');
-  const [message , setMessage] = useState<string | null>(null);
-  const [reservationid , setReservationId] = useState<string | null>(() => localStorage.getItem("reservationId"));
+  const [userId, setUserId] = useState<string | null>(() => 
+      typeof window !== "undefined" ? localStorage.getItem("userId") : null
+  );
 
+  const [name, setName] = useState(() =>
+      typeof window !== "undefined" ? localStorage.getItem("userName") || '' : ''
+  );
+
+  const [phone, setPhone] = useState(() =>
+      typeof window !== "undefined" ? localStorage.getItem("userPhone") || '' : ''
+  );
+  const [message , setMessage] = useState<string | null>(null);
+  const [reservationid, setReservationId] = useState<string | null>(() => 
+    typeof window !== "undefined" ? localStorage.getItem("reservationId") : null
+);
+  
   const validatePhone = (phone: string) => {
     // Allow various phone formats: 10-15 digits, with optional spaces, hyphens, or parentheses
     return /^[\d\s\-\(\)]{10,15}$/.test(phone.replace(/\D/g, '').trim()) && /\d/.test(phone)

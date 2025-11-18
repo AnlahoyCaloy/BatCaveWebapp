@@ -3,7 +3,7 @@ import { motion } from 'framer-motion'
 import { Reservations } from '../Rooms/RoomCard'
 import dayjs from 'dayjs'
 import CardLayout from './CardLayout'
-interface ConfirmationCardProps {
+interface ConfirmedReservationProps {
   reservationData : Reservations[] | null
 }
 
@@ -15,7 +15,7 @@ enum statusColorMap {
   Cancelled = 'bg-gray-500 text-white'
 }
 
-const ConfirmationCard: React.FC<ConfirmationCardProps> = ({ reservationData }) => {
+const ConfirmedReservation: React.FC<ConfirmedReservationProps> = ({ reservationData }) => {
   return (
         <CardLayout>
         {
@@ -30,8 +30,10 @@ const ConfirmationCard: React.FC<ConfirmationCardProps> = ({ reservationData }) 
               (
               <div key={i} className="p-6 rounded-lg shadow-lg flex flex-col gap-4 max-w-[800px] w-full" style={{ backgroundColor: "var(--color-coffee-dark)", borderLeft: "4px solid #D4A574" }}>
                 <div className="mb-4 pb-4" style={{ background : "var(--color-coffee-medium)" , padding : "20px" , borderRadius : "20px" }}>
-                  <h3 className="text-xl font-bold text-orange-100 mb-1">☕ Your Reservation Confirmed</h3>
-                  <p className="text-sm text-orange-300">Welcome, <span className="font-semibold text-white">{userName}</span></p>
+                  <div className='flex flex-col gap-2'>
+                    <h3 className="text-xl font-bold text-orange-100 mb-1">☕ Your Reservation Confirmed</h3>
+                    <p className="text-sm text-orange-300">Welcome, <span className="font-semibold text-white">{userName}</span></p>
+                  </div>
                 </div>
                 
                 <div className="space-y-3 text-gray-100">
@@ -101,4 +103,4 @@ const ConfirmationCard: React.FC<ConfirmationCardProps> = ({ reservationData }) 
       )
 }
 
-export default ConfirmationCard
+export default ConfirmedReservation

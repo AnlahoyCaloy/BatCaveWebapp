@@ -8,21 +8,12 @@ interface SectionProps {
   navBarHeight? : number | 0,
   className? : string,
   style? : React.CSSProperties,
-  isAnimated : boolean
+  isAnimated : boolean,
+  animationVariant? : Variants
 }
 
 
-const Section : React.FC<SectionProps> = ({ children , color , navBarHeight , className, style, isAnimated}) => {
-  
-  const animationVariant : Variants = {
-    hidden : {
-      y : -200, opacity : 0
-    },
-    scrollView : {
-      y : 0, opacity : 1,
-      transition : { duration : 0.8 , ease : "easeInOut" }
-    }
-  }
+const Section : React.FC<SectionProps> = ({ children , color , navBarHeight , className, style, isAnimated, animationVariant}) => {
 
   return (
     <motion.div

@@ -5,12 +5,34 @@ import NewBrewsSection from "../components/NewBrewsComp/NewBrewsSection";
 import HomeSearch from "../components/SearchBar/HomeSearch";
 import Section from "../components/Section";
 import Footer from "../components/Footer/Footer";
+import { Variants } from "motion";
+
+   //  animation variants
+ const animationVariant : Variants = {
+    hidden : {
+      y : -200, opacity : 0
+    },
+    scrollView : {
+      y : 0, opacity : 1,
+      transition : { duration : 0.8 , ease : "easeInOut" }
+    }
+  }
+  
+  const animationVariant2 : Variants = {
+    hidden : {
+      scale : 0.4, opacity : 0
+    },
+    scrollView : {
+      scale : 1 , opacity : 1,
+      transition : { type : "spring" , stiffness : 250, damping : 20 }
+    }
+  }
 
 export default function Home() {
 
   return (
     <div className="home flex justify-center items-center w-full flex-col gap-4"> 
-      <Section isAnimated={false} navBarHeight={176} style={{ alignItems : "center", justifyContent : "center"}}> 
+      <Section isAnimated={true} animationVariant={animationVariant2} navBarHeight={176} style={{ alignItems : "center", justifyContent : "center"}}> 
         {/* 175 is the height of the navbar */}
         <HomeSearch /> 
           <h1 style={{
@@ -24,7 +46,7 @@ export default function Home() {
 
 
       {/* 2nd section */}
-      <Section isAnimated={true} color="var(--color-silk-cream)" 
+      <Section isAnimated={true} animationVariant={animationVariant} color="var(--color-silk-cream)" 
         style={{
           fontFamily: "var(--font-Cinzel)",
           alignItems: "center",

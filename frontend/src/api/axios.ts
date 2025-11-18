@@ -17,6 +17,8 @@ export const apiGet = async (url : string)  => {
     } catch (error) {
         if(axios.isAxiosError(error)) {
             console.error("Data: " , error.response?.data);
+            console.error("Full error: ", error)
+
             console.error("Status: " , error.response?.status);
             return;
         }
@@ -40,6 +42,8 @@ export const apiPost = async (url : string, data : object) => {
         if(axios.isAxiosError(error)) {
             console.error("Data: ", error.response?.data)
             console.error("Status: ", error.response?.status)
+            console.error("Full error: ", error)
+
             return;
         } else {
             console.error("Unexpected error: " , error);
