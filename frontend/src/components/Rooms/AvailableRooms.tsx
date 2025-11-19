@@ -48,6 +48,10 @@ export function reservationOverlap(startA: string, endA: string, startB: string,
   const bStart = dayjs(`2000-01-01T${startB}`);
   const bEnd = dayjs(`2000-01-01T${endB}`);
 
+  // Guard: if either reservation has end before start, consider it invalid => no overlap
+  if (aEnd.isBefore(aStart) || bEnd.isBefore(bStart)) return false;
+
+  // Check if the intervals overlap
   return aStart.isBefore(bEnd) && aEnd.isAfter(bStart);
 }
 
@@ -66,7 +70,6 @@ const AvailableRooms = () => {
     const fetchRoomData = async () => {
       const roomResponse = await axios.get("http://localhost/batcave/backend/public/rooms")
       const reservationResponse = await axios.get("http://localhost/batcave/backend/public/reservations");
-
       const formattedReservations : Reservations[] = reservationResponse.data.map((r : any, i : number) => ({
         roomId : r.room_id,
         userId : r.user_id,
@@ -142,7 +145,6 @@ const AvailableRooms = () => {
     } 
     // if no problems, create new reservation
     const newReservation = {id : `R#${Date.now() * 100}`, ...r}
-
     // // frontend data
     // setReservations([...currentRoom.reservation , newReservation])
     // setRoom(prev => // get the roooms
@@ -156,7 +158,7 @@ const AvailableRooms = () => {
     //     return room;
     //   })
     // )
-
+    
     // if successful return the reservation ID
     // object that we will send to the user
     return { 

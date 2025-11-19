@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import ConfirmedReservation from '../ConfirmationCard/ConfirmedReservation'
 import { AnimatePresence, motion } from 'framer-motion'
 import dayjs from 'dayjs'
+import { reservationOverlap } from './AvailableRooms'
 
 export enum RoomType {
   Study = "Study",
@@ -79,7 +80,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
   const [userId, setUserId] = useState<string | null>(null)
   const [reservationId, setReservationId] = useState<string | null>(null)
   const [reservationData, setReservationData] = useState<Reservations[] | null>(null)
-  const [paxLeft, setPaxLeft] = useState<number>(0);
+  // const [paxLeft, setPaxLeft] = useState<number>(0);
   const router = useRouter()
 
   // Calculate price in real-time
@@ -89,6 +90,19 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
     return pricePerHour * pax * hoursCount
   }, [pax, type, start, end])
 
+  const paxLeft = useMemo(() => {
+    if(!date || !start || !end) return 0;
+
+    const overlappingStudy = room.reservation.filter(r => 
+      r.type === RoomType.Study && 
+      r.date === date && 
+      reservationOverlap(r.start, r.end, start, end)
+    )
+    
+    const totalPax = overlappingStudy.reduce((sum , curr) => sum + curr.pax, 0) 
+
+    return Math.max(totalPax , 0)
+  }, [date, start,room.reservation, end])
 
   // FETCH ALL RESERVATIONS
   // const activeReservations = room.reservation.filter(
@@ -110,6 +124,10 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
     setReservationId(reservationId)
     setUserSaved(true)
   }
+
+  useEffect(() => {
+    
+  })
 
   useEffect(() => {
     if (userSaved) {
@@ -164,6 +182,9 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
       return
     }
     const res = await onReserve(room.id, { date, start, end, pax, type, status: ReservationStatus.Pending, userId, roomId: room.id })
+    
+    console.log("roomId = ", room.id);
+
     if (!res.success) {
       setFeedback(res.message || 'Could not reserve')
       setShowReservationForm(true)
@@ -175,7 +196,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
       if(res.newReservation) {
         await apiPost('/reservations' , res.newReservation)
       }
-      setPaxLeft(res.totalPax);
+      // setPaxLeft(res.totalPax);
       setFeedback('Reserved successfully');
       setShowReservationForm(false)
     }

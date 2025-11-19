@@ -8,7 +8,16 @@ class RoomModel {
 
     public function getRooms(): array {
         $stmt = $this->pdo->query("SELECT * FROM Rooms");
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $rooms = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        foreach ($rooms as $room) {
+            foreach ($rooms as $room) {
+                $room['id'] = str_replace('"' , '' ,$room['id']);
+                $room['name'] = str_replace('"', '', $room['name']);
+            }
+        }
+
+        return $rooms;
     }
 
     public function createRoom(array $data): array {
