@@ -30,27 +30,25 @@ export const apiGet = async (url : string)  => {
     }
 } 
 
-export const apiPost = async (url : string, data : object) => {
-    try {
-        const response = await axiosMain.post(url , data, {
-            headers : {
-                'Content-Type': 'application/json'
-            }
-        })  // url could be /reservations action=POST
-        return {response : response , data : response.data};
-    } catch (error) {
-        if(axios.isAxiosError(error)) {
-            console.error("Data: ", error.response?.data)
-            console.error("Status: ", error.response?.status)
-            console.error("Full error: ", error)
-
-            return;
-        } else {
-            console.error("Unexpected error: " , error);
-            return;
-        }
+export const apiPost = async (url: string, data: object) => {
+  try {
+    const response = await axiosMain.post(url, data, {
+      headers: { 'Content-Type': 'application/json' }
+    });
+    return { success: true, data: response.data };
+  } catch (error) {
+    if (axios.isAxiosError(error)) {
+      console.error("Data: ", error.response?.data || "No data");
+      console.error("Status: ", error.response?.status || "No status");
+      console.error("Full error: ", error);
+      return { success: false, error: error.response?.data || "Unknown error" };
+    } else {
+      console.error("Unexpected error: ", error);
+      return { success: false, error: error };
     }
-}
+  }
+};
+
 
 export default axiosMain;
 
