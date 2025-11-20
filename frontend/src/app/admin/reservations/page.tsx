@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { apiGet, apiPost } from '@/src/api/axios'
 import { Reservations, ReservationStatus } from '@/src/components/Rooms/RoomCard'
-import AdminOnlyLayout from '@/src/components/AdminComponents/AdminOnlyLayout'
+import { EditModal } from '@/src/components/AdminComponents/EditModal'
 // import { EditModal } from '@/src/components/Admin/EditModal'
 // import AdminOnlyLayout from '@/src/components/Admin/AdminOnlyLayout'
 export const statusOptions: ReservationStatus[] = [
@@ -49,25 +49,25 @@ export default function AdminReservationsPage() {
   //   return () => window.removeEventListener('resize', checkMobile)
   // }, [])
 
-  // const onSave = async (updated: Reservations) => {
-  //   setLoading(true)
-  //   setError(null)
-  //   try {
-  //     const payload = { ...updated }
-  //     const resp = await apiPost('/reservations-update', payload)
-  //     if (resp && resp.success) {
-  //       setReservations((prev) => prev.map((r) => (r.id === updated.id ? updated : r)))
-  //       setEditing(null)
-  //     } else {
-  //       setError('Failed to update reservation')
-  //     }
-  //   } catch (err) {
-  //     console.error(err)
-  //     setError('Failed to update reservation')
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }
+  const onSave = async (updated: Reservations) => {
+    setLoading(true)
+    setError(null)
+    try {
+      const payload = { ...updated }
+      const resp = await apiPost('/reservations-update', payload)
+      if (resp && resp.success) {
+        setReservations((prev) => prev.map((r) => (r.id === updated.id ? updated : r)))
+        setEditing(null)
+      } else {
+        setError('Failed to update reservation')
+      }
+    } catch (err) {
+      console.error(err)
+      setError('Failed to update reservation')
+    } finally {
+      setLoading(false)
+    }
+  }
   
   useEffect(() => { 
     const fetchReservations = async () => {
@@ -82,6 +82,7 @@ export default function AdminReservationsPage() {
             date : r.date,
             phone : r.phone,
             start : r.start,
+            end : r.end,
             pax : r.pax,
             type : r.type,
             status : r.status,
@@ -106,17 +107,6 @@ export default function AdminReservationsPage() {
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
-
-  function onSave(form : Reservations) {
-    try {
-      if(form) {
-
-      }
-    } catch (e) {
-      console.log(e);
-    }
-    
-  }
     
   return (
       <div className="p-6 ">

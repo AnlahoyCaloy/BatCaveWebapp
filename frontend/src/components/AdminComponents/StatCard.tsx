@@ -14,7 +14,7 @@ interface StatCardProps {
 
 const StatCard: React.FC<StatCardProps> = ({ title, value, icon, trend, bgColor = 'from-amber-500 to-yellow-600' }) => {
   return (
-    <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+    <div className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow w-full">
       <div className="flex items-start justify-between">
         <div>
           <p className="text-gray-600 text-sm font-medium">{title}</p>

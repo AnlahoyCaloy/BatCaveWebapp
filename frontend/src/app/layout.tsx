@@ -71,6 +71,7 @@ export default function RootLayout({
           </defs>
         </svg>
 
+        {/* wrapped it in a component to conditionally generate the navbar without affecting ssr */}
         <LayoutClient>
           <NavBar/>
 

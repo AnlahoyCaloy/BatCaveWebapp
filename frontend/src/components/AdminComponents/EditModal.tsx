@@ -13,7 +13,7 @@ export const EditModal : React.FC<EditModalProps> = ({ reservation, onClose, onS
   const [form, setForm] = useState<Reservations>({ ...reservation })
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div className="fixed text-black inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
       <div className="relative bg-white rounded-lg shadow-lg w-full max-w-2xl p-6 sm:p-6 md:p-8 lg:p-10">
         <h3 className="text-lg font-bold mb-4">Edit Reservation</h3>

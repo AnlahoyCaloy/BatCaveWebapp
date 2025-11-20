@@ -9,7 +9,7 @@ interface LayoutClientProps {
 
 export default function LayoutClient({ children }: LayoutClientProps) {
   const pathname = usePathname()
-  const isAdmin = pathname.startsWith('/admin')
+  const isAdmin = pathname?.startsWith('/admin')
 
   if (isAdmin) {
     return null
