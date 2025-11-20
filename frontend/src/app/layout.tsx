@@ -89,7 +89,7 @@ export default function RootLayout({
             }}>
             <defs>
               <linearGradient id="gradient" gradientTransform="rotate(90)">
-                <stop offset="10%"  stopColor="var(--color-coffee-dark)" />
+                <stop offset="10%"  stopColor="var(--color-coffee-dark-wave)" />
                 <stop offset="100%" stopColor="var(--color-coffee-medium)" />
               </linearGradient>
             </defs>

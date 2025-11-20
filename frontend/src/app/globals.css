@@ -75,8 +75,9 @@
 
     /* Adjusted coffee tones for dark mode */
     --color-silk-cream: #dbc1ac; /* Keep the warmth */
-    --color-coffee-dark: #935935; /* Slightly lighter for contrast */
+    --color-coffee-dark: oklch(47.3% 0.137 46.201); /* Slightly lighter for contrast  #935935*/ 
     --color-coffee-medium: #754b31; /* Swap to give depth */
+    --color-coffee-dark-wave : #935935;
   }
 }
 

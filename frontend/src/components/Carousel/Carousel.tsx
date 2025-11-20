@@ -47,12 +47,13 @@ const Carousel : React.FC<CarouselProps> = ({ parentWidth }) => {
         }}
       />
       <>
-        <button className='bg-[#935935] w-[60px] flex items-center justify-center h-[60px] p-4 absolute ' style={{
+        <button className='carousel-btn w-[60px] flex items-center justify-center h-[60px] p-4 absolute ' style={{
           top : "45%",
           cursor : "pointer",
           left : "140px",
           zIndex : "10",
-          borderRadius : "50px"
+          borderRadius : "50px",
+          background : "var(--color-coffee-dark)"
         }} onClick={() => {
           carouselRef.current?.goBack();
         }}>
@@ -62,12 +63,13 @@ const Carousel : React.FC<CarouselProps> = ({ parentWidth }) => {
           </svg>
         </button>
 
-        <button className='bg-[#935935] w-[60px] flex items-center justify-center h-[60px] p-4 absolute ' style={{
+        <button className='carousel-btn w-[60px] flex items-center justify-center h-[60px] p-4 absolute ' style={{
           top : "45%",
           cursor : "pointer",
           right : "140px",
           zIndex : "10",
-          borderRadius : "50px"
+          borderRadius : "50px",
+          background : "var(--color-coffee-dark)"
         }} onClick={() => {
           carouselRef.current?.goNext()
         }}>
