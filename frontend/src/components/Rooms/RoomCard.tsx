@@ -123,6 +123,14 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
     return Math.max(totalPax , 0)
   }, [form , room.reservation])
 
+  // Percentage of available seats for visual progress bar
+  const availabilityPercent = useMemo(() => {
+    const cap = room.capacity || 1
+    const used = Math.min(paxLeft, cap)
+    return Math.max(0, ((cap - used) / cap) * 100)
+  }, [room.capacity, paxLeft])
+
+
   // FETCH ALL RESERVATIONS
   // const activeReservations = room.reservation.filter(
   //   r => r.status === ReservationStatus.Pending || r.status === ReservationStatus.Ongoing
@@ -187,7 +195,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
 
   // INSERT RESERVATIONS
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault() 
+    // e.preventDefault() 
     // turn on comment for testing
     if (!form.date) {
       setForm({...form , feedBack : 'Please select a date'})
@@ -234,28 +242,63 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
       {currentReservation ? (
         <ConfirmedReservation reservationData={[currentReservation]} />
       ) : (
-        <div className="room-card w-full p-4 text-black rounded-md shadow-md" style={{ borderRadius: 12, backgroundColor: "var(--color-coffee-dark)", boxShadow: "var(--shadow-custom)" }}>
-          <div className="w-full h-[500px] relative rounded overflow-hidden mb-4" style={{ borderRadius: 8 }}>
-            <Image
-              src={'/images/room.png'}
-              alt={room.name}
-              fill
-              sizes="(max-width: 768px) 100vw, 33vw"
-              style={{ objectFit: 'cover' }}
-            />
-          </div>
-
-          <div className="flex justify-between items-center">
-            <div>
-              <h3 className="text-lg font-semibold">{room.name}</h3>
-              <p className="text-sm text-black-600">Capacity: {room.capacity} pax (max 20)</p>
-              <div className='room-status text-black-600'>{room.reservation.length} reservations</div>
-              <div>Pax left {paxLeft}/{room.capacity}</div>
+        <div className="room-card w-full p-6 rounded-xl transition hover:shadow-xl" style={{ backgroundColor: "var(--color-coffee-dark)", boxShadow: "var(--shadow-custom)" }}>
+          <div className="md:flex md:items-center md:gap-6">
+            <div className="md:w-1/2 w-full h-[256px] md:h-48 relative rounded-lg overflow-hidden mb-4 md:mb-0">
+              <Image
+                src={'/images/room.png'}
+                alt={room.name}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                style={{ objectFit: 'cover' }}
+                className="rounded-lg"
+              />
             </div>
-            <div>
-              <button className="px-3 py-1 bg-blue-600 text-white rounded" onClick={() => setShowReservationForm(s => !s)}>
-                {showReservationForm ? 'Cancel' : 'Reserve'}
-              </button>
+
+            <div className="md:w-1/2 w-full flex flex-col justify-between">
+              <div>
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h3 className="text-2xl font-bold text-amber-50">{room.name}</h3>
+                    <p className="text-sm text-amber-200 mt-1">Capacity: <span className="font-semibold">{room.capacity}</span> pax</p>
+                    <p className="text-sm text-amber-200 mt-1">{room.reservation.length} reservation{room.reservation.length !== 1 ? 's' : ''}</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="inline-flex items-center gap-2 bg-amber-700/30 text-amber-50 px-3 py-1 rounded-full">
+                      <span className="text-sm">☕</span>
+                      <span className="text-xs font-bold">Cozy</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="mt-4">
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm text-amber-300">Pax left</div>
+                    <div className="text-xs text-amber-300">{paxLeft}/{room.capacity}</div>
+                  </div>
+
+                  <div className="w-full bg-amber-700/20 rounded-full h-3 mt-2 overflow-hidden">
+                    <div className="h-3 bg-yellow-400 rounded-full" style={{ width: `${availabilityPercent}%` }} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-4 flex items-center gap-3">
+                <button
+                  aria-label='Reserve Button'
+                  className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-3 bg-linear-to-r from-amber-600 to-yellow-400 text-amber-900 font-bold rounded-lg shadow-lg hover:scale-105 transform transition"
+                  onClick={() => setShowReservationForm(s => !s)}
+                >
+                  {showReservationForm ? 'Cancel' : 'Reserve'}
+                </button>
+
+                {/* <button
+                  type="button"
+                  className="px-3 py-2 border border-amber-600 text-amber-100 rounded-lg hover:bg-amber-700/20 transition"
+                  onClick={() => { /* placeholder for future details action */ }
+                  {/* Details */}
+                {/* </button> */}
+              </div>
             </div>
           </div>
 

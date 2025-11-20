@@ -71,8 +71,9 @@ export default function RootLayout({
         </svg>
       <NavBar/>
 
-      <Wave 
-        fill="var(--color-coffee-medium)"
+      <Wave
+        // fill="var(--color-coffee-medium)"
+        fill="url(#gradient)"
         className="absolute top-0"
         style={{ transform : "scaleY(-1)", height : "180px" }}
         paused={false}
@@ -81,8 +82,14 @@ export default function RootLayout({
           amplitude: 25,
           speed: 0.25,
           points: 3
-        }}
-      />
+        }}>
+        <defs>
+          <linearGradient id="gradient" gradientTransform="rotate(90)">
+            <stop offset="10%"  stopColor="var(--color-coffee-dark)" />
+            <stop offset="100%" stopColor="var(--color-coffee-medium)" />
+          </linearGradient>
+        </defs>
+      </Wave>
 
         {children}
       <Footer />
@@ -90,3 +97,4 @@ export default function RootLayout({
     </html>
   );
 }
+// from-amber-600 to-yellow-400 peak ahh button design

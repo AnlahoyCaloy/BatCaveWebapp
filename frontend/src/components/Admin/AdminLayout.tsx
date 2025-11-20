@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react'
-// import Sidebar from './Sidebar'
+import Sidebar from './Sidebar'
 // import TopBar from './TopBar'
 
 interface AdminLayoutProps {
@@ -15,7 +15,7 @@ const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
       <Sidebar isOpen={sidebarOpen} />
       
       <div className="flex-1 flex flex-col overflow-hidden">
-        <TopBar onMenuToggle={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} />
+        {/* <TopBar onMenuToggle={() => setSidebarOpen(!sidebarOpen)} sidebarOpen={sidebarOpen} /> */}
         
         <main className="flex-1 overflow-auto bg-gray-50">
           <div className="p-8">

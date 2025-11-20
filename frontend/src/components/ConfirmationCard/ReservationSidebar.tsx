@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Reservations } from '../Rooms/RoomCard'
 import dayjs from 'dayjs'
 import SimpleBar from 'simplebar-react'
+import 'simplebar-react/dist/simplebar.min.css';
 
 interface ReservationSidebarProps {
   isOpen: boolean
@@ -24,7 +25,6 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
   const dateStats = useMemo(() => {
     // make key, value pair(object?) of {date: string and data{}} of reservation infos
     const stats : Record<string , { totalPax : number; count : number, reservations : Reservations[]; }> = {};
-    console.log(reservations);
     reservations.map((res) => {
       if(!stats[res.date]) {
         stats[res.date] = { totalPax : 0, count : 0, reservations : [] }
@@ -40,7 +40,7 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
       ...data
     })) // for each [date, data] destructure the date and the data and move them in an object 
   }, [reservations]);
-
+  console.log(dateStats)
   const sidebarVariants = {
     hidden: isMobile ? { opacity: 0, y: 100 } : { opacity: 0, x: -100 },
     visible: isMobile ? { opacity: 1, y: 0, x : 0 } : { opacity: 1, x: 375 },
@@ -122,8 +122,8 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
             </div>
 
             {/* Content */}
-            <SimpleBar>
-            <div className="overflow-y-auto gap-2 max-h-[450] flex flex-col p-4">
+            <SimpleBar className='max-h-[450px] h-[450px]' style={{ overflowX : "hidden" }}>
+            <div className=" gap-2 max-h-[450px] h-[450px] flex flex-col p-4">
               {dateStats.length === 0 ? (
                 <div className="text-center text-amber-100 py-8">
                   <p className="text-sm">No reservations yet</p>
@@ -178,16 +178,16 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
                   </motion.div>
                 ))
               )}
-                <div className={`absolute p-4 border-t border-amber-700 bg-amber-900/30 -bottom-0 left-30`}>
+                
+            </div>
+            </SimpleBar>
+            {/* Footer */}
+            <div className={`absolute p-4 border-t border-amber-700 bg-amber-900/30 -bottom-0 left-30`}>
                   <p className="text-xs text-amber-100 text-center">
                     Total reservations: <span className="font-bold">{reservations.length}</span>
                   </p>
                 
                 </div>
-            </div>
-            </SimpleBar>
-            {/* Footer */}
-
             
           </motion.div>
         </>

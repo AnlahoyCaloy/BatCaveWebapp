@@ -1,8 +1,14 @@
 import React from 'react'
 
-const Sidebar = () => {
+interface SideBarProps {
+  isOpen : boolean
+}
+
+const Sidebar : React.FC<SideBarProps> = ({ isOpen }) => {
   return (
-    <div>Sidebar</div>
+    <div>
+
+    </div>
   )
 }
 
