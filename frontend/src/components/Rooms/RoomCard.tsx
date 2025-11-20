@@ -187,7 +187,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
 
   // INSERT RESERVATIONS
   async function handleSubmit(e: React.FormEvent) {
-    // e.preventDefault() 
+    e.preventDefault() 
     // turn on comment for testing
     if (!form.date) {
       setForm({...form , feedBack : 'Please select a date'})

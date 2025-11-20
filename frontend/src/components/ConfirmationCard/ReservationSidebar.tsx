@@ -3,6 +3,7 @@ import React, { useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Reservations } from '../Rooms/RoomCard'
 import dayjs from 'dayjs'
+import SimpleBar from 'simplebar-react'
 
 interface ReservationSidebarProps {
   isOpen: boolean
@@ -98,7 +99,7 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
             animate="visible"
             exit="exit"
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className={`relative max-h-[500px] h-[500px] ${isMobile ? 'z-2' : '-z-1'} bg-gradient-to-b from-amber-900 to-amber-800  text-amber-50 shadow-2xl ${
+            className={`relative max-h-[550px] h-[550px] ${isMobile ? 'z-2' : '-z-1'} bg-gradient-to-b from-amber-900 to-amber-800  text-amber-50 shadow-2xl ${
               isMobile
                 ? 'inset-0 mx-4 my-12 rounded-xl max-w-md w-200'
                 : 'right-0 top-0 bottom-0 w-96 rounded-r-xl'
@@ -121,7 +122,8 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
             </div>
 
             {/* Content */}
-            <div className="overflow-y-auto h-full p-4">
+            <SimpleBar>
+            <div className="overflow-y-auto gap-2 max-h-[450] flex flex-col p-4">
               {dateStats.length === 0 ? (
                 <div className="text-center text-amber-100 py-8">
                   <p className="text-sm">No reservations yet</p>
@@ -176,13 +178,14 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
                   </motion.div>
                 ))
               )}
-              <div className={`absolute p-4 border-t border-amber-700 bg-amber-900/30 bottom-0 left-30`}>
-              <p className="text-xs text-amber-100 text-center">
-                Total reservations: <span className="font-bold">{reservations.length}</span>
-              </p>
+                <div className={`absolute p-4 border-t border-amber-700 bg-amber-900/30 -bottom-0 left-30`}>
+                  <p className="text-xs text-amber-100 text-center">
+                    Total reservations: <span className="font-bold">{reservations.length}</span>
+                  </p>
+                
+                </div>
             </div>
-            </div>
-
+            </SimpleBar>
             {/* Footer */}
 
             

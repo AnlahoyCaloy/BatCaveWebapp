@@ -16,6 +16,11 @@ enum statusColorMap {
 }
 
 const ConfirmedReservation: React.FC<ConfirmedReservationProps> = ({ reservationData }) => {
+
+  function reset() {
+    localStorage.clear();
+  }
+
   return (
         <CardLayout>
         {
@@ -30,6 +35,7 @@ const ConfirmedReservation: React.FC<ConfirmedReservationProps> = ({ reservation
             return(
               (
               <div key={i} className="p-6 rounded-lg shadow-lg flex flex-col gap-4 max-w-[800px] w-full" style={{ backgroundColor: "var(--color-coffee-dark)", borderLeft: "4px solid #D4A574" }}>
+                <button onClick={() => reset()}>hey</button>
                 <div className="mb-4 pb-4" style={{ background : "var(--color-coffee-medium)" , padding : "20px" , borderRadius : "20px" }}>
                   <div className='flex flex-col gap-2'>
                     <h3 className="text-xl font-bold text-orange-100 mb-1">☕ Your Reservation Confirmed</h3>
