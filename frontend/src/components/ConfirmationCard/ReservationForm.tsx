@@ -26,7 +26,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ form , setForm, handl
 
   // check if mobile 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    const checkMobile = () => setIsMobile(window.innerWidth < 769)
     checkMobile()
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
@@ -50,7 +50,6 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ form , setForm, handl
       className="fixed inset-0 z-2 flex items-center justify-center"
     > 
     {/* goo type sh */}
-    
 
       <motion.div
         initial={{ opacity : 0 , backdropFilter : "blur(0px)" }}
@@ -69,7 +68,7 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ form , setForm, handl
         transition={{ type: 'spring', stiffness: 300, damping: 25 }}
         onSubmit={handleSubmit}
         onClick={(e) => e.stopPropagation()}
-        className="reservation-form absolute w-full max-w-xl mx-4 p-6 bg-[var(--color-coffee-medium)] rounded-xl border-4 border-amber-600 shadow-2xl space-y-4"
+        className="reservation-form absolute w-full max-w-[610px] mx-4 p-6 bg-[var(--color-coffee-medium)] rounded-xl border-4 border-amber-600 shadow-2xl space-y-4"
         // style={{ filter : "url(#goo)" }} // make it gooey
       >
         {/* Sidebar Toggle Button */}

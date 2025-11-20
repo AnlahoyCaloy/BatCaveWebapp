@@ -20,22 +20,25 @@ const SearchBar :React.FC<SearchBarProps> = ({placeholder = "Search for Drinks..
   }
   
   return (
-    <div className='search-bar gap-5 items-center justify-center max-w-[605px] mx-auto flex flex-col sm:flex-row w-full'>
-      <section className='input-container flex-1 w-full'>
+    <div className='search-bar gap-4 items-center justify-center max-w-[605px] mx-auto flex flex-col sm:flex-row w-full p-10'>
+      <section className='input-container flex-1 w-full sm:mr-2'>
         <input
-        className='w-full h-[49px] p-4 text-[18px] rounded-[15px] bg-amber-50 shadow-(--shadow-custom) text-black '
-        type='text'
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        placeholder={placeholder}
-        onKeyDown={handleKeyPress}
-        
+          className='w-full h-[49px] p-4 text-[18px] rounded-[15px] bg-amber-50 shadow-[var(--shadow-custom)] text-black'
+          type='text'
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={placeholder}
+          onKeyDown={handleKeyPress}
         />
       </section>
-      <motion.button className='search-btn w-full sm:w-[120px] h-[49px] rounded-[15px] bg-amber-800 shadow-(--shadow-custom) text-white font-medium'>
+      <motion.button
+        onClick={handleQuery}
+        className='search-btn w-full sm:w-[120px] h-[49px] rounded-[15px] bg-amber-800 shadow-[var(--shadow-custom)] text-white font-medium'
+      >
         Search
       </motion.button>
     </div>
+
   )
 }
 

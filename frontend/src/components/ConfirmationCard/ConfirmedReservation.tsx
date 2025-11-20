@@ -91,13 +91,13 @@ const ConfirmedReservation: React.FC<ConfirmedReservationProps> = ({ reservation
                 </div>
 
                 <div className='btns flex justify-between items-center'>
-                  <motion.div className={`w-fit p-4 rounded-full text-sm font-semibold ${statusColorMap[status] || 'bg-gray-400 text-white'}`}>
+                  <motion.div className={`w-fit p-4 rounded-lg text-sm font-semibold ${statusColorMap[status] || 'bg-gray-400 text-white'}`}>
                     {status}
                   </motion.div>
                   {/* should have an onclick cancel */}
-                  <motion.div className={`w-fit p-4 rounded-full text-sm font-semibold bg-red-600 cursor-pointer`}> 
+                  <motion.button className={`w-fit p-4 text-sm font-semibold bg-linear-to-r from-amber-600 to-yellow-400 transform transition hover:scale-105 active:scale-95 tracking-wide rounded-lg`}> 
                     Cancel
-                  </motion.div>
+                  </motion.button>
                 
                 </div>  
                

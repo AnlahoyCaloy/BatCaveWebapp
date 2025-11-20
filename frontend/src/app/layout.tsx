@@ -5,6 +5,7 @@ import NavBar from "../components/Navigation/NavBar";
 import localFont from 'next/font/local';
 import Footer from "../components/Footer/Footer";
 import Wave from 'react-wavify'
+import LayoutClient from "./LayoutClient";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -69,27 +70,30 @@ export default function RootLayout({
             </filter>
           </defs>
         </svg>
-      <NavBar/>
 
-      <Wave
-        // fill="var(--color-coffee-medium)"
-        fill="url(#gradient)"
-        className="absolute top-0"
-        style={{ transform : "scaleY(-1)", height : "180px" }}
-        paused={false}
-        options={{
-          height: 0,
-          amplitude: 25,
-          speed: 0.25,
-          points: 3
-        }}>
-        <defs>
-          <linearGradient id="gradient" gradientTransform="rotate(90)">
-            <stop offset="10%"  stopColor="var(--color-coffee-dark)" />
-            <stop offset="100%" stopColor="var(--color-coffee-medium)" />
-          </linearGradient>
-        </defs>
-      </Wave>
+        <LayoutClient>
+          <NavBar/>
+
+          <Wave
+            // fill="var(--color-coffee-medium)"
+            fill="url(#gradient)"
+            className="absolute top-0"
+            style={{ transform : "scaleY(-1)", height : "180px" }}
+            paused={false}
+            options={{
+              height: 0,
+              amplitude: 25,
+              speed: 0.25,
+              points: 3
+            }}>
+            <defs>
+              <linearGradient id="gradient" gradientTransform="rotate(90)">
+                <stop offset="10%"  stopColor="var(--color-coffee-dark)" />
+                <stop offset="100%" stopColor="var(--color-coffee-medium)" />
+              </linearGradient>
+            </defs>
+          </Wave>
+        </LayoutClient>
 
         {children}
       <Footer />
@@ -97,4 +101,4 @@ export default function RootLayout({
     </html>
   );
 }
-// from-amber-600 to-yellow-400 peak ahh button design
+// bg-linear-to-r from-amber-600 to-yellow-400 peak ahh button design

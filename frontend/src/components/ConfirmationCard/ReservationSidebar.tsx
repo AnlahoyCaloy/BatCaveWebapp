@@ -99,7 +99,7 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
             animate="visible"
             exit="exit"
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className={`relative max-h-[550px] h-[550px] ${isMobile ? 'z-2' : '-z-1'} bg-gradient-to-b from-amber-900 to-amber-800  text-amber-50 shadow-2xl ${
+            className={`sidebar relative max-w-[400px] w-[350px] max-h-[550px] h-[550px] ${isMobile ? 'z-2' : '-z-1'} bg-gradient-to-b from-amber-900 to-amber-800  text-amber-50 shadow-2xl ${
               isMobile
                 ? 'inset-0 mx-4 my-12 rounded-xl max-w-md w-200'
                 : 'right-0 top-0 bottom-0 w-96 rounded-r-xl'

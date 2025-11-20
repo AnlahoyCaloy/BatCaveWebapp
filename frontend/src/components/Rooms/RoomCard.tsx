@@ -41,7 +41,8 @@ export interface Reservations {
   status: ReservationStatus,
   roomId: string,
   phone?: string,
-  userName?: string
+  userName?: string,
+  totalPrice : number
 }
 
 interface RoomCardProps {
@@ -195,7 +196,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
 
   // INSERT RESERVATIONS
   async function handleSubmit(e: React.FormEvent) {
-    // e.preventDefault() 
+    e.preventDefault() 
     // turn on comment for testing
     if (!form.date) {
       setForm({...form , feedBack : 'Please select a date'})
@@ -212,7 +213,8 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
       ...reservationData, 
       status : ReservationStatus.Pending, 
       userId, 
-      roomId : room.id
+      roomId : room.id,
+      totalPrice : currentPrice
     })
 
     console.log("roomId = ", room.id);
@@ -242,7 +244,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
       {currentReservation ? (
         <ConfirmedReservation reservationData={[currentReservation]} />
       ) : (
-        <div className="room-card w-full p-6 rounded-xl transition hover:shadow-xl" style={{ backgroundColor: "var(--color-coffee-dark)", boxShadow: "var(--shadow-custom)" }}>
+        <div className="room-card bg-gradient-to-b from-amber-900 to-amber-800 w-full p-6 rounded-xl transition hover:shadow-xl" style={{ boxShadow: "var(--shadow-custom)" }}>
           <div className="md:flex md:items-center md:gap-6">
             <div className="md:w-1/2 w-full h-[256px] md:h-48 relative rounded-lg overflow-hidden mb-4 md:mb-0">
               <Image
@@ -278,7 +280,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
                   </div>
 
                   <div className="w-full bg-amber-700/20 rounded-full h-3 mt-2 overflow-hidden">
-                    <div className="h-3 bg-yellow-400 rounded-full" style={{ width: `${availabilityPercent}%` }} />
+                    <motion.div initial={{width : "0%" }} animate={{ width : `${availabilityPercent}%`}} transition={{ duration : 1 ,ease : "easeInOut" }} className="h-3 bg-yellow-400 rounded-full"  />
                   </div>
                 </div>
               </div>

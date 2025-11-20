@@ -10,7 +10,7 @@ class ReservationModel {
     // admin stuff      
     public function getReservations(): array {
         $stmt = $this->pdo->query("
-            SELECT r.*, u.name AS user_name, rm.name AS room_name
+            SELECT r.*, u.name AS user_name, rm.name AS room_name, u.phone
             FROM Reservations r
             JOIN Users u ON r.user_id = u.id
             JOIN Rooms rm ON r.room_id = rm.id

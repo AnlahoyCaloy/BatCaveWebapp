@@ -23,6 +23,24 @@ try {
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $db->exec("PRAGMA foreign_keys = ON;");
 
+    // ALTER THE TABLE
+    // $currentColumns = $db->query('
+    //     PRAGMA table_info(Reservations);
+    // ')->fetchAll(PDO::FETCH_ASSOC);
+    
+    // $hasTotalPrice = false;
+
+    // foreach($currentColumns as $column) {
+    //     if($column['name'] === 'totalPrice') {
+    //         $hasTotalPrice = true;
+    //         break;
+    //     }
+    // }
+
+    // if(!$hasTotalPrice) {
+    //     $db->exec("ALTER TABLE Reservations ADD COLUMN totalPrice INTEGER;");
+    // }
+
     // -------------------- 
     // Tables
     $db->exec("

@@ -98,8 +98,10 @@ const ActionButtons = forwardRef<ActionButtonRef, ActionButtonProps>(
           ref={mainButtonRef}
           className={`action-button main-button`}
           style={{
-            width: 80,
-            height: 80,
+            maxWidth: 80,
+            maxHeight: 80,
+            width : 80,
+            height : 80,
             borderRadius: "50%",
             background: fill ?? "#673ab7",
             display: "flex",

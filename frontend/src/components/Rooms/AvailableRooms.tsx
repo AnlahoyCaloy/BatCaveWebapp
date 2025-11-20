@@ -147,13 +147,13 @@ const AvailableRooms = () => {
         reservationOverlap(r.start , r.end , functionRoom.start , functionRoom.end)
       ) // check if the current room which is a function that we will input is the same date and check if it has a study type, then check if it overlaps with the current room that we have that is a function returns the ones that overlap
       if(overlappingStudy.length > 0) { // if no overlappingStudy store in database?
-        console.log("hey")
         return { success : false , message : "Reservation Will Overlap in Study Schedules on that Date."}
       } 
-      
+
     }
     // if no problems, create new reservation
     const newReservation = {id : `R#${Date.now() * 100}`, ...r}
+    console.log(newReservation)
     // // frontend data
     // setReservations([...currentRoom.reservation , newReservation])
     // setRoom(prev => // get the roooms
