@@ -97,7 +97,7 @@ const AvailableRooms = () => {
     const currentRoom = room.find(room => roomId === room.id);
     // r is if the user inputted something r is the object and omit is remove the id 
     let totalPaxAfterReservation: number | undefined;
-
+    console.log(r)
     if(!currentRoom) {
       return { success : false , message : "Room not found in database"}
     }

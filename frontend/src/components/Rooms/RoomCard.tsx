@@ -209,13 +209,16 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
     // const res = await onReserve(room.id, { date, start, end, pax, type, status: ReservationStatus.Pending, userId, roomId: room.id })
     const { feedBack , ...reservationData } = form;
     // remove feedback because interface Reservations doesn't have one.
-    const res = await onReserve(room.id , {
-      ...reservationData, 
+
+    const payload = {
+      ...reservationData,
       status : ReservationStatus.Pending, 
       userId, 
       roomId : room.id,
-      totalPrice : currentPrice
-    })
+      totalPrice : currentPrice,
+    }
+
+    const res = await onReserve(room.id ,  payload);
 
     console.log("roomId = ", room.id);
 
@@ -228,7 +231,14 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
         setReservationId(res.reservationId)
       }
       if(res.newReservation) {
-        await apiPost('/reservations' , res.newReservation)
+        const { start, end , ...data } = res.newReservation
+        const mappedPayload = {
+          ...data,
+          start_time : start,
+          end_time : end
+        }
+
+        await apiPost('/reservations' , mappedPayload)
 
       }
       // setPaxLeft(res.totalPax);

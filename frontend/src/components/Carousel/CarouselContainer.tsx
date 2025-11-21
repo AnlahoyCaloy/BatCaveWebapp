@@ -6,7 +6,7 @@ import Carousel from './Carousel'
 
 const CarouselContainer  = ({ isMobile } : { isMobile : boolean }) => {
   return (
-    <div className={`carousel-container w-full ${isMobile ? "-z-1" : "z-1"}`}>
+    <div className={`carousel-container w-full ${isMobile ? "-z-2" : "z-1"}`}>
       <Carousel parentWidth={700}/>
     </div>
   )

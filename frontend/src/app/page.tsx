@@ -6,6 +6,7 @@ import HomeSearch from "../components/SearchBar/HomeSearch";
 import Section from "../components/Section";
 import Footer from "../components/Footer/Footer";
 import { Variants } from "motion";
+import HomePage from "../components/Home/HomePage";
 
    //  animation variants
  const animationVariant : Variants = {
@@ -18,7 +19,7 @@ import { Variants } from "motion";
     }
   }
   
-  const animationVariant2 : Variants = {
+  export const animationVariant2 : Variants = {
     hidden : {
       scale : 0.9, opacity : 0
     },
@@ -32,16 +33,7 @@ export default function Home() {
 
   return (
     <div className="home flex justify-center items-center w-full flex-col gap-4"> 
-      <Section isAnimated={true} animationVariant={animationVariant2} navBarHeight={176} style={{ alignItems : "center", justifyContent : "center"}}> 
-        {/* 175 is the height of the navbar */}
-        <HomeSearch /> 
-          <h1 style={{
-            fontFamily : 'var(--font-Cinzel)',
-            fontSize : '35px'
-          }}>Explore Drinks</h1>
-        <CarouselContainer />
-      </Section>
-
+      <HomePage />
 
       {/* 2nd section */}
       <Section isAnimated={true} animationVariant={animationVariant} color="var(--color-silk-cream)" 

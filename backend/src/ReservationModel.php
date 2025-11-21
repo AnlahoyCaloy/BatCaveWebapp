@@ -59,7 +59,7 @@ class ReservationModel {
                 id, room_id, user_id, date, start_time, end_time, pax, type, status, created_at
             )
             VALUES (
-                :id, :room_id, :user_id, :date, :start, :end, :pax, :type, :status, :created_at
+                :id, :room_id, :user_id, :date, :start_time, :end_time, :pax, :type, :status, :created_at
             )
         ");
         $stmt->execute([
@@ -67,8 +67,8 @@ class ReservationModel {
             ':room_id' => $data['roomId'],
             ':user_id' => $data['userId'],
             ':date' => $data['date'],
-            ':start_time' => $data['start'],
-            ':end_time' => $data['end'],
+            ':start_time' => $data['start_time'],
+            ':end_time' => $data['end_time'],
             ':pax' => $data['pax'],
             ':type' => $data['type'],
             ':status' => $data['status'],
