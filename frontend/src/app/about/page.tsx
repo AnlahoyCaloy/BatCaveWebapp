@@ -15,7 +15,7 @@ const About = () => {
 
   const itemVariant = {
     hidden: { opacity: 0, y: 20, scale: 0.9 },
-    visible: { opacity: 1, y: 0, scale : 1, transition: { type : "spring", ease: 'easeOut', duration : 0.7 } }
+    visible: { opacity: 1, y: 0, scale : 1, transition: { type : "spring", duration : 0.7 } }
   }
 
   return (
