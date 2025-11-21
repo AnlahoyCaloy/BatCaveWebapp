@@ -40,7 +40,7 @@ const NavBar: React.FC = () => {
                   <span className='opacity-75'>Bat Cave Café.</span>
                 </div>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-20">
                 <ThemeToggle />
                 <ActionButtonGroup />
               </div>

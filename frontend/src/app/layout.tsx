@@ -78,11 +78,11 @@ export default function RootLayout({
             // fill="var(--color-coffee-medium)"
             fill="url(#gradient)"
             className="absolute top-0 z-1" 
-            style={{ transform : "scaleY(-1)", height : "210px" }}
+            style={{ transform : "scaleY(-1)", height : "180px" }}
             paused={false}
             options={{
               height: 0,
-              amplitude: 15,
+              amplitude: 20,
               speed: 0.25,
               points: 3
             }}>

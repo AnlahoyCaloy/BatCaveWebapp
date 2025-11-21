@@ -14,7 +14,9 @@ const Menu = () => {
     backgroundImage: "url('/images/bg-menu.png')",
     backgroundSize: "cover",
     backgroundPosition: "center",
-    backgroundAttachment: "fixed"
+    backgroundAttachment: "fixed",
+    position : "absolute",
+    top : "130px"
   }}>
       <Section isAnimated={false}
       style={{ display : "flex", gap : "30px", justifyContent : "center", marginTop : "15px", padding : "20px", zIndex : "-1000" , paddingTop : "40px"}} className='menu-inner-container md:flex-row' >
