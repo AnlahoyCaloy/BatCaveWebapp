@@ -21,6 +21,8 @@ const ConfirmedReservation: React.FC<ConfirmedReservationProps> = ({ reservation
     localStorage.clear();
   }
 
+  console.log(reservationData)
+  
   return (
         <CardLayout>
         {
