@@ -100,6 +100,7 @@ export default function AdminReservationsPage() {
       } finally {
         setLoading(false);
       }
+
     }
 
     fetchReservations()
@@ -109,7 +110,15 @@ export default function AdminReservationsPage() {
     window.addEventListener('resize', checkMobile)
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
-    
+
+  if(reservations.length === 0) {
+    return (
+      <div className='w-full h-full'>
+        No reservations yet...
+      </div>
+    )
+  }
+
   return (
       <div className="p-6 ">
         <h2 className="text-2xl text-[var(--color-coffee-medium)] font-bold mb-4">Reservations</h2>
@@ -118,6 +127,8 @@ export default function AdminReservationsPage() {
         {error && <div className="text-sm text-red-600 mb-2">{error}</div>}
 
         {/* Desktop: table; Mobile: stacked cards */}
+
+        
         {!isMobile ? (
           <div className="text-black overflow-auto bg-white rounded-lg shadow">
             <table className="min-w-full table-auto">

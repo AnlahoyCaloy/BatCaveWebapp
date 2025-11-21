@@ -56,7 +56,7 @@ class ReservationModel {
     public function createReservation(array $data): array {
         $stmt = $this->pdo->prepare("
             INSERT INTO Reservations (
-                id, room_id, user_id, date, start, end, pax, type, status, created_at
+                id, room_id, user_id, date, start_time, end_time, pax, type, status, created_at
             )
             VALUES (
                 :id, :room_id, :user_id, :date, :start, :end, :pax, :type, :status, :created_at
@@ -67,8 +67,8 @@ class ReservationModel {
             ':room_id' => $data['roomId'],
             ':user_id' => $data['userId'],
             ':date' => $data['date'],
-            ':start' => $data['start'],
-            ':end' => $data['end'],
+            ':start_time' => $data['start'],
+            ':end_time' => $data['end'],
             ':pax' => $data['pax'],
             ':type' => $data['type'],
             ':status' => $data['status'],
