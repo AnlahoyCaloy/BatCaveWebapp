@@ -30,7 +30,9 @@ try {
     $pdo = new Database();
     $db = $pdo->getConnection();
     $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $db->exec("PRAGMA foreign_keys = ON;");
+
+    // SQLITE TOO
+    // $db->exec("PRAGMA foreign_keys = ON;");
 
     // ALTER THE TABLE
     // $currentColumns = $db->query('
@@ -51,37 +53,72 @@ try {
     // }
 
     // -------------------- 
-    // Tables
+
+    //POSTGRESSQL
     $db->exec("
-        CREATE TABLE IF NOT EXISTS Rooms (
-            id TEXT PRIMARY KEY,
-            name TEXT NOT NULL,
-            capacity INTEGER NOT NULL
-        )
+    CREATE TABLE IF NOT EXISTS Rooms (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        capacity INTEGER NOT NULL
+    );
     ");
+
     $db->exec("
-        CREATE TABLE IF NOT EXISTS Users (
-            id TEXT PRIMARY KEY,
-            name TEXT NOT NULL,
-            phone TEXT NOT NULL
-        )
+    CREATE TABLE IF NOT EXISTS Users (
+        id TEXT PRIMARY KEY,
+        name TEXT NOT NULL,
+        phone TEXT NOT NULL
+    );
     ");
+
     $db->exec("
-        CREATE TABLE IF NOT EXISTS Reservations (
-            id TEXT PRIMARY KEY,
-            room_id TEXT NOT NULL,
-            user_id TEXT NOT NULL,
-            date TEXT NOT NULL,
-            start TEXT NOT NULL,
-            end TEXT NOT NULL,
-            pax INTEGER NOT NULL,
-            type TEXT NOT NULL CHECK(type IN ('Study', 'Function')),
-            status TEXT NOT NULL CHECK(status IN ('Pending', 'Ongoing', 'Completed', 'No-show', 'Cancelled')),
-            created_at TEXT,
-            FOREIGN KEY(room_id) REFERENCES Rooms(id) ON DELETE CASCADE,
-            FOREIGN KEY(user_id) REFERENCES Users(id) ON DELETE CASCADE
-        )
+    CREATE TABLE IF NOT EXISTS Reservations (
+        id TEXT PRIMARY KEY,
+        room_id TEXT NOT NULL REFERENCES Rooms(id) ON DELETE CASCADE,
+        user_id TEXT NOT NULL REFERENCES Users(id) ON DELETE CASCADE,
+        date DATE NOT NULL,
+        start TIME NOT NULL,
+        end TIME NOT NULL,
+        pax INTEGER NOT NULL,
+        type VARCHAR(20) NOT NULL CHECK (type IN ('Study','Function')),
+        status VARCHAR(20) NOT NULL CHECK (status IN ('Pending','Ongoing','Completed','No-show','Cancelled')),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
     ");
+
+
+
+    // Tables SQLITE
+    // $db->exec("
+    //     CREATE TABLE IF NOT EXISTS Rooms (
+    //         id TEXT PRIMARY KEY,
+    //         name TEXT NOT NULL,
+    //         capacity INTEGER NOT NULL
+    //     )
+    // ");
+    // $db->exec("
+    //     CREATE TABLE IF NOT EXISTS Users (
+    //         id TEXT PRIMARY KEY,
+    //         name TEXT NOT NULL,
+    //         phone TEXT NOT NULL
+    //     )
+    // ");
+    // $db->exec("
+    //     CREATE TABLE IF NOT EXISTS Reservations (
+    //         id TEXT PRIMARY KEY,
+    //         room_id TEXT NOT NULL,
+    //         user_id TEXT NOT NULL,
+    //         date TEXT NOT NULL,
+    //         start TEXT NOT NULL,
+    //         end TEXT NOT NULL,
+    //         pax INTEGER NOT NULL,
+    //         type TEXT NOT NULL CHECK(type IN ('Study', 'Function')),
+    //         status TEXT NOT NULL CHECK(status IN ('Pending', 'Ongoing', 'Completed', 'No-show', 'Cancelled')),
+    //         created_at TEXT,
+    //         FOREIGN KEY(room_id) REFERENCES Rooms(id) ON DELETE CASCADE,
+    //         FOREIGN KEY(user_id) REFERENCES Users(id) ON DELETE CASCADE
+    //     )
+    // ");
 
     // --------------------
     // Models
