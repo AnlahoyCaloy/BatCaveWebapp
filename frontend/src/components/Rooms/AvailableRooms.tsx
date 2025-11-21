@@ -10,7 +10,7 @@ import Section from '../Section';
 import axios from 'axios';
 import axiosMain, { apiGet, apiPost } from '@/src/api/axios';
 import { AnimatePresence } from 'motion/react';
-
+import { motion } from 'framer-motion';
 // Business rules implemented (assumptions):
 // - Max capacity per room is 20 (enforced on input)
 // - Only one reservation can be "exclusive" (type=function) at overlapping times for a given room.
@@ -22,6 +22,9 @@ import { AnimatePresence } from 'motion/react';
 dayjs.extend(isSameOrBefore)
 dayjs.extend(isSameOrAfter)
 
+const normalizeTime = (time: string) => {
+  return time.length === 8 ? time.slice(0,5) : time; // "HH:mm:ss" => "HH:mm"
+}
 
 export function withinOperatingHours(start: string, end: string, openTime: string, closeTime: string) : boolean{
   const startTime = dayjs(`2000-01-01T${start}`);
@@ -33,6 +36,8 @@ export function withinOperatingHours(start: string, end: string, openTime: strin
   return startTime.isSameOrAfter(open) && endTime.isSameOrBefore(close);
 }
 
+
+
 /**
  * Checks if the first date overlaps within the second date 
  * @param {string} startA -> the start of the first date param 
@@ -42,11 +47,13 @@ export function withinOperatingHours(start: string, end: string, openTime: strin
  * @returns {boolean} checks if the first date is before the end of the second date and if the end of the first date is after the start of the second date. Basically , just checks if its inside. 
  */
 
+
+
 export function reservationOverlap(startA: string, endA: string, startB: string, endB: string): boolean {
-  const aStart = dayjs(`2000-01-01T${startA}`);
-  const aEnd = dayjs(`2000-01-01T${endA}`);
-  const bStart = dayjs(`2000-01-01T${startB}`);
-  const bEnd = dayjs(`2000-01-01T${endB}`);
+  const aStart = dayjs(`2000-01-01T${normalizeTime(startA)}`);
+  const aEnd = dayjs(`2000-01-01T${normalizeTime(endA)}`);
+  const bStart = dayjs(`2000-01-01T${normalizeTime(startB)}`);
+  const bEnd = dayjs(`2000-01-01T${normalizeTime(endB)}`);
 
   // Guard: if either reservation has end before start, consider it invalid => no overlap
   if (aEnd.isBefore(aStart) || bEnd.isBefore(bStart)) return false;
@@ -67,14 +74,24 @@ const AvailableRooms = () => {
 
   useEffect(() => {
     // getting data from database now.
+    // GETS ALLL ROOMS AND RESERVATIONS HERE IS WHERE THE FIRST DATA FLOW
     const fetchRoomData = async () => {
       // const roomResponse = await axios.get("http://localhost/batcave/backend/public/rooms")
       const roomResponse = await apiGet("/rooms");
       const reservationResponse = await apiGet("/reservations");
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const formattedReservations : Reservations[] = reservationResponse?.data.map((r : any, i : number) => ({
-        roomId : r.room_id,
-        userId : r.user_id,
-        ...r
+        roomId: r.room_id,
+        userId: r.user_id,
+        date: r.date,
+        start: r.start_time,   // map from start_time
+        end: r.end_time,       // map from end_time because postgres have end and start reserved keyword
+        pax: r.pax,
+        type: r.type,
+        phone: r.phone,
+        status: r.status,
+        user_name: r.user_name,
+        room_name: r.room_name,
       }))
 
       const roomsWithReservations = roomResponse?.data.map((room : Room) => ({
@@ -101,7 +118,7 @@ const AvailableRooms = () => {
     if(!currentRoom) {
       return { success : false , message : "Room not found in database"}
     }
-  
+    console.log(r.start)
     const opStart = '13:00' // 1pm start of operation hours
     const opEnd = '22:00' // 10pm end of operation hours
     
@@ -143,18 +160,20 @@ const AvailableRooms = () => {
       totalPaxAfterReservation = totalPax + r.pax;
       console.log("Total Pax after reservation: " + totalPaxAfterReservation);
     } else if (r.type === RoomType.Function) { // if function type
-      const overlappingStudy = currentRoom.reservation.filter((functionRoom) => 
+      console.log("HEY HEY")
+      const overlappingfunction = currentRoom.reservation.filter((functionRoom) => 
+        functionRoom.type === RoomType.Function &&
         functionRoom.date === r.date &&
         reservationOverlap(r.start , r.end , functionRoom.start , functionRoom.end)
       ) // check if the current room which is a function that we will input is the same date and check if it has a study type, then check if it overlaps with the current room that we have that is a function returns the ones that overlap
-      if(overlappingStudy.length > 0) { // if no overlappingStudy store in database?
-        return { success : false , message : "Reservation Will Overlap in Study Schedules on that Date."}
+      if(overlappingfunction.length > 0) { // if no overlappingStudy store in database?
+        return { success : false , message : "Your Function Reservation Will Overlap with Function Schedules on that Date."}
       } 
 
     }
+
     // if no problems, create new reservation
     const newReservation = {id : `R#${Date.now() * 100}`, ...r}
-    console.log(newReservation)
     // // frontend data
     // setReservations([...currentRoom.reservation , newReservation])
     // setRoom(prev => // get the roooms
@@ -186,14 +205,14 @@ const AvailableRooms = () => {
   return (
     <Section isAnimated={false}>
       <AnimatePresence>
-        <div className='available-rooms flex flex-col items-center gap-2 my-8'>
-            { 
-            // room is from the database
-              room.map((r , i) => (
-                <RoomCard room={r} key={i} onReserve={onReserve}/>
-              ))
-            }
-        </div>
+          <div className='available-rooms flex flex-col items-center gap-2 my-8'>
+              { 
+              // room is from the database
+                room.map((r , i) => (
+                  <RoomCard room={r} key={i} onReserve={onReserve}/>
+                ))
+              }
+          </div>
       </AnimatePresence>
     </Section>
   )

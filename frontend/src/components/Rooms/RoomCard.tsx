@@ -64,6 +64,14 @@ const enum PricePerPax {
   Function = 1000
 }
 
+const isDateValid = (date: string) => {
+  const today = dayjs().startOf('day'); // today at 00:00
+  const selected = dayjs(date, "YYYY-MM-DD");
+  return selected.isSame(today) || selected.isAfter(today); // today or future
+};
+
+
+
 // Helper function to calculate hours between two time strings
 const calculateHours = (startTime: string, endTime: string): number => {
   const start = dayjs(`2024-01-01T${startTime}`)
@@ -196,12 +204,17 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
 
   // INSERT RESERVATIONS
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault() 
     // turn on comment for testing
     if (!form.date) {
       setForm({...form , feedBack : 'Please select a date'})
       return
     }
+
+    if(!isDateValid(form.date)){
+      setForm({ ...form , feedBack : "Date cannot be in the past" });
+      return;
+    }
+
     if (!userId) {
       setForm({...form , feedBack : 'Please enter your details first.'})
       return
@@ -217,10 +230,10 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
       roomId : room.id,
       totalPrice : currentPrice,
     }
+    console.log(payload)
 
     const res = await onReserve(room.id ,  payload);
 
-    console.log("roomId = ", room.id);
 
     if (!res.success) {
       setForm({...form , feedBack : res.message || 'Could not reserve'})
@@ -237,24 +250,23 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
           start_time : start,
           end_time : end
         }
-
         await apiPost('/reservations' , mappedPayload)
-
       }
       // setPaxLeft(res.totalPax);
       setForm({...form , feedBack : 'Reserved successfully'});
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000); // 1 second
       setShowReservationForm(false)
     }
   }
-  
-  console.log(reservationData)
-
+  // bg-gradient-to-b from-amber-900 to-amber-800
   return (
-    <div className='w-full max-w-[1100px] flex flex-col justify-center items-center'>
+    <div className='w-full max-w-[1100px] bg-[var(--color-coffee-dark)] rounded-lg flex flex-col justify-center items-center'>
       {currentReservation ? (
         <ConfirmedReservation reservationData={[currentReservation]} />
-      ) : (
-        <div className="room-card bg-gradient-to-b from-amber-900 to-amber-800 w-full p-6 rounded-xl transition hover:shadow-xl" style={{ boxShadow: "var(--shadow-custom)" }}>
+      ) : ( 
+        <motion.div className="room-card  w-full p-6 rounded-xl transition hover:shadow-xl" style={{ boxShadow: "var(--shadow-custom)" }}>
           <div className="md:flex md:items-center md:gap-6">
             <div className="md:w-1/2 w-full h-[256px] md:h-48 relative rounded-lg overflow-hidden mb-4 md:mb-0">
               <Image
@@ -303,13 +315,6 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
                 >
                   {showReservationForm ? 'Cancel' : 'Reserve'}
                 </button>
-
-                {/* <button
-                  type="button"
-                  className="px-3 py-2 border border-amber-600 text-amber-100 rounded-lg hover:bg-amber-700/20 transition"
-                  onClick={() => { /* placeholder for future details action */ }
-                  {/* Details */}
-                {/* </button> */}
               </div>
             </div>
           </div>
@@ -332,7 +337,7 @@ const RoomCard: React.FC<RoomCardProps> = ({ room, onReserve }) => {
               <p className="text-sm">{feedback}</p>
             </div>
           )}
-        </div>
+        </motion.div>
       )}
     </div>
   )

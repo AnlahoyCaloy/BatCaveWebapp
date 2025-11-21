@@ -3,9 +3,10 @@ import React, { useEffect, useState } from 'react'
 import '../../app/globals.css'
 import ActionButtonGroup from './Buttons/ActionButtonGroup'
 import Image from 'next/image'
-import brandImage from '../../../public/icons/brandIcon.png'
+import brandImage from '../../../public/images/bg.png'
 import { motion, AnimatePresence } from 'framer-motion'
 import MenuButtons from './Buttons/MenuButtons'
+import ThemeToggle from '@/src/components/ThemeToggle/ThemeToggle'
 import { usePathname } from 'next/navigation'
 
 const NavBar: React.FC = () => {
@@ -29,22 +30,25 @@ const NavBar: React.FC = () => {
     <div className='nav-bar-container flex justify-center'>
       {/* Desktop Navbar */}
       {!isMobile ? (
-        <nav className='nav-bar max-w-[1500px] w-full rounded-[100px] z-1 mt-1.5'>
+        <nav className='nav-bar max-w-[1500px] w-full rounded-[100px] z-2 mt-1.5 '>
           <section className='navigation-section flex h-[160px] justify-between px-20 py-4 pb-5'>
             <div className='logo flex w-full max-w-[500px] items-center gap-6 font-extrabold text-[23px]'>
-              <div className='rounded-[100px] shadow-[var(--shadow-custom)]' style={{ backgroundColor: "var(--color-coffee-medium)" }}>
-                <Image src={brandImage} alt="BatCaveLogo" width={120} height={120}/>
+              <div className='' >
+                <Image src={brandImage} alt="BatCaveLogo" width={150} height={150}/>
               </div>
               <div className='text-4xl w-full h-full flex items-center'>
-                <span>Bat Cave Café.</span>
+                  <span className='opacity-75'>Bat Cave Café.</span>
+                </div>
               </div>
-            </div>
-            <ActionButtonGroup />
+              <div className="flex items-center gap-3">
+                <ThemeToggle />
+                <ActionButtonGroup />
+              </div>
           </section>
         </nav>
       ) : (
         // Mobile Navbar
-        <nav className='w-full text-amber-50 relative z-1'>
+        <nav className='w-full text-amber-50 relative z-2'>
           <div className='max-w-[1185px] h-[160px] mx-auto flex items-center justify-between px-4 py-3'>
             <div className='flex items-center gap-3'>
               <div className='w-10 h-10 relative rounded-full overflow-hidden shadow-[var(--shadow-custom)]' style={{ backgroundColor: 'var(--color-coffee-medium)' }}>
@@ -54,6 +58,7 @@ const NavBar: React.FC = () => {
             </div>
 
             <div className='flex items-center gap-3'>
+              <ThemeToggle />
               <button
                 aria-label="Open menu"
                 onClick={() => setMenuOpen((v) => !v)}

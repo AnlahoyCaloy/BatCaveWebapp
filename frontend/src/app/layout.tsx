@@ -74,23 +74,22 @@ export default function RootLayout({
         {/* wrapped it in a component to conditionally generate the navbar without affecting ssr */}
         <LayoutClient>
           <NavBar/>
-
           <Wave
             // fill="var(--color-coffee-medium)"
             fill="url(#gradient)"
-            className="absolute top-0"
-            style={{ transform : "scaleY(-1)", height : "180px" }}
+            className="absolute top-0 z-1" 
+            style={{ transform : "scaleY(-1)", height : "210px" }}
             paused={false}
             options={{
               height: 0,
-              amplitude: 25,
+              amplitude: 15,
               speed: 0.25,
               points: 3
             }}>
             <defs>
               <linearGradient id="gradient" gradientTransform="rotate(90)">
-                <stop offset="10%"  stopColor="var(--color-coffee-dark-wave)" />
-                <stop offset="100%" stopColor="var(--color-coffee-medium)" />
+                <stop offset="10%"  stopColor="var(--color-coffee-medium)" />
+                <stop offset="90%" stopColor="var(--color-coffee-dark)" />
               </linearGradient>
             </defs>
           </Wave>

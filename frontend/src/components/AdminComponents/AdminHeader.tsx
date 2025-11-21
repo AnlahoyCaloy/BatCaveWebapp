@@ -2,6 +2,7 @@
 import React from 'react'
 import Image from 'next/image'
 import brandImage from '../../../public/icons/brandIcon.png'
+import ThemeToggle from '@/src/components/ThemeToggle/ThemeToggle'
 
 interface AdminHeaderProps {
   onMenuToggle?: () => void
@@ -36,6 +37,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuToggle, sidebarOpen, ti
         </div>
 
         <div className="flex items-center gap-3">
+          <ThemeToggle />
           <div className="relative">
             <input
               className="border px-3 py-2 rounded-md w-56 placeholder-gray-400 text-sm"

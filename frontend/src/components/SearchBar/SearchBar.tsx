@@ -33,7 +33,7 @@ const SearchBar :React.FC<SearchBarProps> = ({placeholder = "Search for Drinks..
       </section>
       <motion.button
         onClick={handleQuery}
-        className='search-btn w-full sm:w-[120px] h-[49px] rounded-[15px] bg-amber-800 shadow-[var(--shadow-custom)] text-white font-medium'
+        className='search-btn w-full sm:w-[120px] h-[49px] rounded-[15px] bg-[var(--color-coffee-dark)] shadow-[var(--shadow-custom)] text-white font-medium'
       >
         Search
       </motion.button>

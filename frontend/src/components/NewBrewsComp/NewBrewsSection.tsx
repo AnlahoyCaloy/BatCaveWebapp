@@ -67,7 +67,7 @@ const NewBrewsSection: React.FC = () => {
 
   return (
     <div className="new-brews flex flex-col gap-2 w-full h-full items-center">
-      <motion.div initial="hidden" variants={container} whileInView="scrollView" className="w-full items-center justify-center flex p-5"  viewport={{ once: true }} style={{ color : "var(--color-coffee-medium)" }}>
+      <motion.div initial="hidden" variants={container} whileInView="scrollView" className="w-full items-center justify-center flex p-5"  viewport={{ once: true }} style={{ color : "var(--color-coffee-dark)" }}>
         {/* <motion.div variants={child} style={{ fontSize: "4rem", position : "absolute"}}>Our New Brews</motion.div>
         <motion.div variants={child} style={{ fontSize: "4rem", position : "absolute" }}>Our New Brews</motion.div> */}
         <motion.div className="headline text-[65px] text-[var(--color-coffee-1)]" variants={child}>Our New Brews</motion.div>

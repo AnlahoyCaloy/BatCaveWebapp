@@ -4,45 +4,45 @@ import { motion } from 'framer-motion'
 import Image from 'next/image'
 import '../../app/globals.css'
 
-
 export interface MenuCardProps {
-  cover : string;
+  cover: string;
   description: string;
   value: number;
 }
 
-
-const MenuCard : React.FC<MenuCardProps> = ({cover , description ,value}) => {
+const MenuCard: React.FC<MenuCardProps> = ({ cover, description, value }) => {
   return (
-    <motion.div className='menu-card cursor-pointer w-full h-full p-6 items-center flex flex-none'
-    style={{ borderRadius : "10px", backgroundColor : "var(--color-accent)", boxShadow : "var(--shadow-custom)" }}
-    initial={{ y : 0 }}
-    whileHover={{ y : -10 }}>
-      <section className='inner-menu-card w-full p-1.5 max-w-[450px] aspect-[5/2] flex items-center'>
-        <div className='cover-container h-full w-[210px] relative rounded-[25px] overflow-hidden'>
-          <Image 
-            src={cover} 
-            alt='coffee-img' 
-            className='object-cover'
-            fill
-          />
-        </div>
+    <motion.div
+    className="menu-card relative cursor-pointer w-[350px] h-[350px] overflow-hidden rounded-[20px] flex-none"
+    style={{ boxShadow: "var(--shadow-custom)", border : "2px solid #783D18"}}
+      initial={{ y: 0 }}
+      whileHover={{ y: -5 }}
+    >
+      {/* Image */}
+      <Image
+        src={cover}
+        alt="coffee-img"
+        width={500}
+        height={500}
+        className="w-full h-full object-cover"
+      />
 
-        <div className='info flex flex-col justify-center pl-4 gap-2'
-        style={{ color : "black" }}>
-          <h2 className='text-[17px] font-semibold'>{description}</h2>
-          <p className='text-[18px] font-bold'>${value.toFixed(2)}</p>
-
-          <motion.div className='add-to-cart-btn p-4 font-bold'
-          style={{ backgroundColor : "var(--color-coffee-dark)", borderRadius : "25px", width : "100%" , height : "full", alignSelf : "end", }}
-          initial={{ y : 0 }}
-          whileTap={{ y : 0 }}
-          whileHover={{ y : -10, boxShadow : "var(--shadow-custom-button)" }}>
-            Add to cart
-          </motion.div>
-        </div>
-      </section>
-
+      {/* Overlay */}
+      <motion.div
+        className="absolute inset-0 bg-black bg-opacity-60 flex flex-col justify-center items-center text-center p-4 gap-3 text-white"
+        initial={{ opacity: 0 }}
+        whileHover={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        <h2 className="text-lg font-semibold">{description}</h2>
+        <p className="text-xl font-bold">${value.toFixed(2)}</p>
+        <motion.button
+          className="bg-[var(--color-coffee-dark)] text-[var(--color-text)] px-6 py-2 rounded-full font-bold"
+          whileTap={{ scale: 0.95 }}
+        >
+          Add to Cart
+        </motion.button>
+      </motion.div>
     </motion.div>
   )
 }

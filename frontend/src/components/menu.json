@@ -1,0 +1,86 @@
+[
+  {
+    "category": "specialty coffee",
+    "title": "Mocha Latte",
+    "description": "Rich chocolate flavor combined with smooth espresso for the perfect morning boost.",
+    "price": "₱120",
+    "image": "mocha-latte.png"
+  },
+  {
+    "category": "specialty coffee",
+    "title": "Caramel Macchiato",
+    "description": "Velvety espresso layered with caramel syrup and creamy milk.",
+    "price": "₱130",
+    "image": "caramel-macchiato.png"
+  },
+  {
+    "category": "specialty coffee",
+    "title": "Cold Brew",
+    "description": "Slow-steeped coffee for a smooth, refreshing taste that keeps you energized.",
+    "price": "₱140",
+    "image": "cold-brew.png"
+  },
+  {
+    "category": "specialty coffee",
+    "title": "Hazelnut Cappuccino",
+    "description": "A nutty twist on the classic cappuccino, perfect for coffee lovers.",
+    "price": "₱125",
+    "image": "hazelnut-cappuccino.png"
+  },
+  {
+    "category": "pastry",
+    "title": "Blueberry Danish",
+    "description": "Flaky pastry filled with fresh blueberries and a sweet glaze.",
+    "price": "₱75",
+    "image": "blueberry-danish.png"
+  },
+  {
+    "category": "pastry",
+    "title": "Chocolate Croissant",
+    "description": "Buttery croissant with a decadent chocolate center.",
+    "price": "₱80",
+    "image": "chocolate-croissant.png"
+  },
+  {
+    "category": "pastry",
+    "title": "Cinnamon Roll",
+    "description": "Soft, warm roll with a sweet cinnamon swirl and icing topping.",
+    "price": "₱70",
+    "image": "cinnamon-roll.png"
+  },
+  {
+    "category": "pastry",
+    "title": "Almond Tart",
+    "description": "Crisp tart shell with a rich almond cream filling.",
+    "price": "₱85",
+    "image": "almond-tart.png"
+  },
+  {
+    "category": "snacks",
+    "title": "Cheese Stick",
+    "description": "Crispy golden sticks stuffed with gooey cheese.",
+    "price": "₱50",
+    "image": "cheese-stick.png"
+  },
+  {
+    "category": "snacks",
+    "title": "Chicken Wings",
+    "description": "Juicy wings tossed in your choice of spicy or savory sauce.",
+    "price": "₱95",
+    "image": "chicken-wings.png"
+  },
+  {
+    "category": "snacks",
+    "title": "French Fries",
+    "description": "Crispy on the outside, soft on the inside, served with ketchup.",
+    "price": "₱60",
+    "image": "french-fries.png"
+  },
+  {
+    "category": "snacks",
+    "title": "Onion Rings",
+    "description": "Crunchy, golden rings with a hint of seasoning for a perfect snack.",
+    "price": "₱65",
+    "image": "onion-rings.png"
+  }
+]

@@ -18,17 +18,8 @@ import HomePage from "../components/Home/HomePage";
       transition : { duration : 0.8 , ease : "easeInOut" }
     }
   }
-  
-  export const animationVariant2 : Variants = {
-    hidden : {
-      scale : 0.9, opacity : 0
-    },
-    scrollView : {
-      scale : 1 , opacity : 1,
-      transition : { type : "spring" , stiffness : 250, damping : 20 }
-    }
-  }
 
+  
 export default function Home() {
 
   return (

@@ -23,7 +23,9 @@ interface ReservationFormProps {
 const ReservationForm: React.FC<ReservationFormProps> = ({ form , setForm, handleSubmit, setShowReservationForm, currentPrice, roomReservations}) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [isMobile, setIsMobile] = useState(false)
+  const [loading , setIsLoading] = useState(false);
 
+  
   // check if mobile 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 769)
@@ -66,9 +68,8 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ form , setForm, handl
         exit={{ opacity : 0, scale : 0.9 }}
         variants={reservationVariant}
         transition={{ type: 'spring', stiffness: 300, damping: 25 }}
-        onSubmit={handleSubmit}
         onClick={(e) => e.stopPropagation()}
-        className="reservation-form absolute w-full max-w-[610px] mx-4 p-6 bg-[var(--color-coffee-medium)] rounded-xl border-4 border-amber-600 shadow-2xl space-y-4"
+        className="reservation-form absolute w-full max-w-[610px] mx-4 p-6 bg-[var(--color-coffee-dark)] rounded-xl border-4 border-amber-600 shadow-2xl space-y-4"
         // style={{ filter : "url(#goo)" }} // make it gooey
       >
         {/* Sidebar Toggle Button */}
@@ -176,10 +177,16 @@ const ReservationForm: React.FC<ReservationFormProps> = ({ form , setForm, handl
 
         <div className="flex gap-3 pt-4">
           <button
+            type='button'
+            disabled={loading}
             className="flex-1 px-4 py-3 bg-linear-to-r from-amber-600 to-yellow-600 text-white font-bold rounded-lg hover:from-amber-700 hover:to-yellow-700 shadow-lg transform transition hover:scale-105 active:scale-95 text-base tracking-wide"
-            type="submit"
+            onClick={async (e) => {
+              setIsLoading(true);
+              await handleSubmit(e);
+              setIsLoading(false);
+            }}
           >
-            ✓ Brew It!
+            {loading ? "Processing..." : "✓ Brew It!"}
           </button>
           <button
             type="button"

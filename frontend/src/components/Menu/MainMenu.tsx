@@ -15,11 +15,11 @@ const MainMenu : React.FC<MainMenuProps> = ({ data }) => {
   return (
     <div className='menu'>
       <SimpleBar
-        style={{ backgroundColor : "var(--color-coffee-dark)", boxShadow : "var(--shadow-custom)", borderRadius : "20px"}}
+        style={{ backdropFilter : "blur(10px)", borderRadius : "20px", border : "2px solid #783D18"}}
         autoHide={true}
-        className='relative w-full max-w-[1000px] h-[750px] grid sm:grid-cols-1 md:grid-cols-2 gap-4'
+        className='relative w-full max-w-[1200px] h-[750px] grid sm:grid-cols-1 md:grid-cols-2 gap-4'
       >
-        <section className='menu-container relative h-[650px] grid sm:grid-cols-1 md:grid-cols-2 p-7 gap-4' style={{ borderRadius : "20px"}}>
+        <section className='menu-container relative h-[650px] grid sm:grid-cols-1 md:grid-cols-3 p-7 gap-4 place-items-center' style={{ borderRadius : "20px"}}>
           {
             data.map((d , i) => {
               const coverPath = getImagePath(d.cover)

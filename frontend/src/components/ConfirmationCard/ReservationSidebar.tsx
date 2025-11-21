@@ -41,6 +41,9 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
     })) // for each [date, data] destructure the date and the data and move them in an object 
   }, [reservations]);
   console.log(dateStats)
+
+
+
   const sidebarVariants = {
     hidden: isMobile ? { opacity: 0, y: 100 } : { opacity: 0, x: -100 },
     visible: isMobile ? { opacity: 1, y: 0, x : 0 } : { opacity: 1, x: 375 },
@@ -164,7 +167,7 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
                           >
                             <p className="font-semibold">{res.userName}</p>
                             <p className="text-amber-200">
-                              {res.start} - {res.end} ({res.pax} pax, {res.type})
+                              {dayjs(res.date + "T" + res.start).format("h:mm")}pm - {dayjs(res.date + "T" + res.end).format("h:mm")}pm ({res.pax} pax, {res.type})
                             </p>
                           </div>
                         ))}
@@ -182,7 +185,7 @@ const ReservationSidebar: React.FC<ReservationSidebarProps> = ({
             </div>
             </SimpleBar>
             {/* Footer */}
-            <div className={`absolute p-4 border-t border-amber-700 bg-amber-900/30 -bottom-0 left-30`}>
+            <div className={`absolute p-4 border-t border-amber-700 bg-amber-900/30 bottom-0 left-30`}>
                   <p className="text-xs text-amber-100 text-center">
                     Total reservations: <span className="font-bold">{reservations.length}</span>
                   </p>
