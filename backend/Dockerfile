@@ -1,7 +1,7 @@
 FROM php:8.2-apache
 
 # Install SQLite support
-RUN docker-php-ext-install pdo pdo_sqlite
+RUN docker-php-ext-install pdo_sqlite
 
 # Enable Apache rewrite for routing
 RUN a2enmod rewrite
