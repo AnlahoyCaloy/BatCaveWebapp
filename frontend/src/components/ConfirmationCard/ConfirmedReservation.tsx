@@ -7,7 +7,7 @@ interface ConfirmedReservationProps {
   reservationData : Reservations[] | null
 }
 
-enum statusColorMap {
+export enum statusColorMap {
   Pending = 'bg-orange-500 text-white',
   Ongoing = 'bg-yellow-500 text-black',
   Completed = 'bg-green-600 text-white',

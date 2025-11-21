@@ -123,6 +123,12 @@ body {
   }
 }
 
+@media (max-width : 430px) {
+  .menu-container {
+    /* width: ; */
+  }
+}
+
 @media (max-width : 375px) {
   .menu-inner-container {
     align-items: center;
@@ -186,4 +192,23 @@ body {
     /* .action-button-group {
       display:  none;
     } */
+}
+@media (max-width : 768px) {
+  .menu-buttons {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 768px) {
+  .headline {
+    font-size: 2.5rem; /* smaller font */
+    transform: translateY(50px); /* optional adjust translate */
+  }
+}
+
+@media (max-width: 480px) {
+  .headline {
+    font-size: 2rem;
+    transform: translateY(30px);
+  }
 }

@@ -18,14 +18,14 @@ const Admin = () => {
           <StatCard title="Active Users" value={42} icon="👥" trend={{ value: -4, isPositive: false }} />
         </section>
 
-        <section className="bg-linear-to-r from-amber-800  to-amber-400 rounded-lg shadow p-4 max-w-[700px]">
+        <section className="bg-[var(--color-coffee-2)] rounded-lg shadow p-4 max-w-[700px]">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold">Quick Actions</h2>
             <Link href="/admin/reservations" className="text-sm text-amber-600">View all reservations</Link>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-            <Link href="/admin/reservations" className="block p-4 rounded-lg bg-amber-50 hover:bg-amber-100">Manage Reservations</Link>
+            <Link href="/admin/reservations" className="block p-4 rounded-lg bg-gradient-to-r from-amber-400 to-amber-800 hover:scale-106 transition active:scale-95 text-black">Manage Reservations</Link>
           </div>
         </section>
       </div>

@@ -16,7 +16,7 @@ const AdminOnlyLayout: React.FC<AdminOnlyLayoutProps> = ({ children }) => {
       <div className="flex-1 flex flex-col">
         <AdminHeader onMenuToggle={() => setSidebarOpen((s) => !s)} sidebarOpen={sidebarOpen} />
 
-        <main className="flex-1 overflow-auto bg-gray-50">
+        <main className="flex-1 overflow-auto ">
           <div className="p-6">
             {children}
           </div>

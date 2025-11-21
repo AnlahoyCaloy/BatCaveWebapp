@@ -5,7 +5,7 @@ import Carousel from './Carousel'
 
 const CarouselContainer = () => {
   return (
-    <div className='carousel-container w-full'>
+    <div className='carousel-container w-full -z-2'>
       <Carousel parentWidth={700}/>
     </div>
   )

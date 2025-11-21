@@ -11,7 +11,7 @@ interface AdminHeaderProps {
 
 const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuToggle, sidebarOpen, title = 'Admin' }) => {
   return (
-    <header className="bg-white border-b border-gray-200">
+    <header className="bg-[var(--color-coffee-medium)] border-b border-gray-200">
       <div className="max-w-[1400px] mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <button
@@ -19,7 +19,7 @@ const AdminHeader: React.FC<AdminHeaderProps> = ({ onMenuToggle, sidebarOpen, ti
             aria-label="Toggle menu"
             className="p-2 rounded-md hover:bg-gray-100"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>

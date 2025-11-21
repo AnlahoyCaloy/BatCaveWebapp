@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { Reservations } from "../Rooms/RoomCard"
 import { ReservationStatus } from "../Rooms/RoomCard"
 import { statusOptions } from "@/src/app/admin/reservations/page"
+import { motion } from 'framer-motion';
 
 interface EditModalProps {
   reservation : Reservations
@@ -12,10 +13,22 @@ interface EditModalProps {
 export const EditModal : React.FC<EditModalProps> = ({ reservation, onClose, onSave }) => {
   const [form, setForm] = useState<Reservations>({ ...reservation })
 
+  const overlayVariant = {
+    hidden : { opacity : 0 },
+    animate : { opacity : 1},
+    exit : { opacity : 0 }
+  }
+
+  const modalVariant = {
+    hidden : { opacity : 0 , scale : 0.9 },
+    animate : { opacity : 1 , scale : 1},
+    exit : { opacity : 0 , scale : 0.9}
+  }
+  
   return (
-    <div className="fixed text-black inset-0 z-50 flex items-center justify-center p-4">
+    <motion.div variants={overlayVariant} initial={"hidden"} animate={"animate"} exit={"exit"} className="fixed text-black inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/40" onClick={onClose} />
-      <div className="relative bg-white rounded-lg shadow-lg w-full max-w-2xl p-6 sm:p-6 md:p-8 lg:p-10">
+      <motion.div variants={modalVariant} initial={"hidden"} animate={"animate"} exit={"exit"} className="relative bg-white rounded-lg shadow-lg w-full max-w-2xl p-6 sm:p-6 md:p-8 lg:p-10">
         <h3 className="text-lg font-bold mb-4">Edit Reservation</h3>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -55,9 +68,11 @@ export const EditModal : React.FC<EditModalProps> = ({ reservation, onClose, onS
 
         <div className="mt-4 flex justify-end gap-3">
       </div>
-          <button className="px-4 py-2 rounded border" onClick={onClose}>Close</button>
-          <button className="px-4 py-2 rounded bg-amber-600 text-white" onClick={() => onSave(form)}>Save</button>
-        </div>
-    </div>
+          <div className="btns flex gap-5">
+            <button className="px-4 py-2 rounded border" onClick={onClose}>Close</button>
+            <button className="px-4 py-2 rounded bg-amber-600 text-white" onClick={() => onSave(form)}>Save</button>
+          </div>
+      </motion.div>
+    </motion.div>
   )
 }

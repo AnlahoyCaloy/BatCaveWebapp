@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { apiGet, apiPost } from '@/src/api/axios'
 import { Reservations, ReservationStatus } from '@/src/components/Rooms/RoomCard'
 import { EditModal } from '@/src/components/AdminComponents/EditModal'
+import { AnimatePresence } from 'framer-motion'
+import { statusColorMap } from '@/src/components/ConfirmationCard/ConfirmedReservation'
 // import { EditModal } from '@/src/components/Admin/EditModal'
 // import AdminOnlyLayout from '@/src/components/Admin/AdminOnlyLayout'
 export const statusOptions: ReservationStatus[] = [
@@ -110,7 +112,7 @@ export default function AdminReservationsPage() {
     
   return (
       <div className="p-6 ">
-        <h2 className="text-2xl font-bold mb-4">Reservations</h2>
+        <h2 className="text-2xl text-[var(--color-coffee-medium)] font-bold mb-4">Reservations</h2>
 
         {loading && <div className="text-sm text-black">Loading…</div>}
         {error && <div className="text-sm text-red-600 mb-2">{error}</div>}
@@ -119,7 +121,7 @@ export default function AdminReservationsPage() {
         {!isMobile ? (
           <div className="text-black overflow-auto bg-white rounded-lg shadow">
             <table className="min-w-full table-auto">
-              <thead className="bg-gray-50">
+              <thead className="bg-[var(--color-coffee-medium)]">
                 <tr>
                   <th className="px-4 py-2 text-left">ID</th>
                   <th className="px-4 py-2 text-left">User</th>
@@ -134,7 +136,7 @@ export default function AdminReservationsPage() {
               </thead>
               <tbody>
                 {reservations.map((r) => (
-                  <tr key={r.id} className="border-b last:border-b-0 bg-linear-to-r from-amber-600 to-yellow-400">
+                  <tr key={r.id} className="border-b border-white last:border-b-0 ">
                     <td className="px-4 py-3 text-sm">{r.id}</td>
                     <td className="px-4 py-3 text-sm">{r.userName || r.userId}</td>
                     <td className="px-4 py-3 text-sm">{r.phone || '-'}</td>
@@ -142,7 +144,7 @@ export default function AdminReservationsPage() {
                     <td className="px-4 py-3 text-sm">{r.start} - {r.end}</td>
                     <td className="px-4 py-3 text-sm">{r.pax}</td>
                     <td className="px-4 py-3 text-sm">{r.type}</td>
-                    <td className="px-4 py-3 text-sm">{r.status}</td>
+                    <td className={`px-4 py-3 text-sm ${statusColorMap[r.status]}`}>{r.status}</td>
                     <td className="px-4 py-3 text-sm">
                       <div className="flex gap-2">
                         <button
@@ -178,15 +180,17 @@ export default function AdminReservationsPage() {
             ))}
           </div>
         )}
-
+        <AnimatePresence>
         {/* Edit modal */}
         {editing && (
-          <EditModal
-            reservation={editing}
-            onClose={() => setEditing(null)}
-            onSave={onSave}
-          />
+            <EditModal
+              reservation={editing}
+              onClose={() => setEditing(null)}
+              onSave={onSave}
+            />
         )}
+        </AnimatePresence>
+
       </div>
   )
 }

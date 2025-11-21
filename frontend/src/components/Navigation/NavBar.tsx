@@ -1,39 +1,41 @@
 "use client"
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import '../../app/globals.css'
 import ActionButtonGroup from './Buttons/ActionButtonGroup'
 import Image from 'next/image'
 import brandImage from '../../../public/icons/brandIcon.png'
-import { useEffect, useState } from 'react'
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion'
+import MenuButtons from './Buttons/MenuButtons'
+import { usePathname } from 'next/navigation'
 
+const NavBar: React.FC = () => {
+  const [isMobile, setIsMobile] = useState<boolean>(false)
+  const [menuOpen, setMenuOpen] = useState<boolean>(false)
+  const pathname = usePathname();
+  useEffect(() => {
+    window.scrollTo(0, 0)
 
-const NavBar : React.FC = () => {
-  const [isMobile , setIsMobile] = useState<boolean>(false);
-  const [menuOpen, setMenuOpen] = useState<boolean>(false);
+    const checkMobile = () => setIsMobile(window.innerWidth < 1185)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   useEffect(() => {
-    window.scrollTo(0, 0);
-
-    const checkMobile = () => setIsMobile(window.innerWidth < 1185);
-    // run once on mount to set initial state
-    checkMobile()
-    window.addEventListener('resize' , checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-
-  }, []); // empty dependency array = run once on mount
+    setMenuOpen(false);
+  }, [pathname])
 
   return (
-    
     <div className='nav-bar-container flex justify-center'>
-      { !isMobile ? (
+      {/* Desktop Navbar */}
+      {!isMobile ? (
         <nav className='nav-bar max-w-[1500px] w-full rounded-[100px] z-1 mt-1.5'>
           <section className='navigation-section flex h-[160px] justify-between px-20 py-4 pb-5'>
-            <div className={`logo flex w-full max-w-[500px] items-center gap-6 font-extrabold text-[23px]`}>
-              <div className='rounded-[100px] shadow-[var(--shadow-custom)]' style={{ backgroundColor : "var(--color-coffee-medium)" }}>
+            <div className='logo flex w-full max-w-[500px] items-center gap-6 font-extrabold text-[23px]'>
+              <div className='rounded-[100px] shadow-[var(--shadow-custom)]' style={{ backgroundColor: "var(--color-coffee-medium)" }}>
                 <Image src={brandImage} alt="BatCaveLogo" width={120} height={120}/>
               </div>
-              <div className={`text-4xl w-full h-full flex items-center`}>
+              <div className='text-4xl w-full h-full flex items-center'>
                 <span>Bat Cave Café.</span>
               </div>
             </div>
@@ -41,7 +43,8 @@ const NavBar : React.FC = () => {
           </section>
         </nav>
       ) : (
-        <nav className='w-full text-amber-50 relative z-2'>
+        // Mobile Navbar
+        <nav className='w-full text-amber-50 relative z-1'>
           <div className='max-w-[1185px] h-[160px] mx-auto flex items-center justify-between px-4 py-3'>
             <div className='flex items-center gap-3'>
               <div className='w-10 h-10 relative rounded-full overflow-hidden shadow-[var(--shadow-custom)]' style={{ backgroundColor: 'var(--color-coffee-medium)' }}>
@@ -63,20 +66,42 @@ const NavBar : React.FC = () => {
             </div>
           </div>
 
-          {/* Slide-down menu for mobile */}
-          <motion.div className={`${menuOpen ? 'max-h-[800px] py-4' : 'max-h-0'} overflow-hidden transition-all duration-300 bg-[var(--color-coffee-dark)]`}> 
-            <div className='max-w-[1185px] mx-auto px-4'>
-              <div className='bg-[var(--color-coffee-medium)] rounded-lg p-3'>
-                <ActionButtonGroup />
-              </div>
-            </div>
-          </motion.div>
+          {/* Sidebar */}
+          <AnimatePresence>
+            {menuOpen && (
+              <>
+                {/* Overlay */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 0.5 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setMenuOpen(false)}
+                  className="fixed inset-0 bg-black z-100"
+                />
+                {/* Sidebar Menu */}
+                <motion.div
+                  initial={{ x: '-100%' }}
+                  animate={{ x: 0 }}
+                  exit={{ x: '-100%' }}
+                  transition={{ type: 'tween', duration: 0.3 }}
+                  className='fixed top-0 left-0 w-64 h-full bg-[var(--color-coffee-dark)] z-100 shadow-lg p-4 flex flex-col'
+                >
+                  <div className='flex justify-between items-center mb-6'>
+                    <span className='text-xl font-bold text-amber-50'>Menu</span>
+                    <button onClick={() => setMenuOpen(false)} className='text-amber-50 text-2xl font-bold'>&times;</button>
+                  </div>
+                  <div className='flex flex-col gap-4'>
+                    {/* <ActionButtonGroup /> */}
+                    <MenuButtons/>
+                  </div>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
         </nav>
-      ) }
-      
-      
+      )}
     </div>
   )
 }
 
-export default NavBar;
+export default NavBar

@@ -25,11 +25,16 @@ const ActionButtons = forwardRef<ActionButtonRef, ActionButtonProps>(
       container: containerRef.current,
     }))
 
-    const navs = ["About" , "Rooms" , "Menu", "Home"]
-
+    // const navs = ["About" , "Rooms" , "Menu", "Home"]
+    const navs = [
+      { name : "About"  , path : "/about" },
+      { name : "Rooms"  , path : "/rooms" },
+      { name : "Menu"  , path : "/menu" },
+      { name : "Home"  , path : "/" },
+    ]
 
     const buttons = navs.map((nav, i) => (
-      <Link className="" key={i} href={`/${nav.toLowerCase()}`} passHref>
+      <Link className="" key={i} href={`${nav.path}`} passHref>
         <motion.div
           className={`action-button button ${className}`}
           style={{
@@ -66,7 +71,7 @@ const ActionButtons = forwardRef<ActionButtonRef, ActionButtonProps>(
             transition : {type : "spring" , stiffness : 300, damping : 20}
           }}
         >
-          {nav}
+          {nav.name}
         </motion.div>
       </Link>
     ))
